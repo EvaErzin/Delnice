@@ -23,6 +23,8 @@ class Delnica(models.Model):
     datum = models.DateField(verbose_name='Datum')
     odpiralni_tecaj = models.FloatField(verbose_name='Odpiralni tečaj')
     uradni_tecaj = models.FloatField(verbose_name='Uradni tečaj')
+    volumen_trgovanja = models.IntegerField(verbose_name='Volumen trgovanja')
+    stevilo_delnic = models.IntegerField(verbose_name='Število vseh delnic')
 
     class __Meta__:
         unique_together = ('simbol', 'datum')
