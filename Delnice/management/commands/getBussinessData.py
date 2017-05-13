@@ -23,15 +23,11 @@ class Command(BaseCommand):
                 result = re.finditer(pattern, content)
                 result1 = re.finditer(pattern1, content)
             f.close()
-            print('f closed')
 
 
             for r in result1:
                 profits = r.groupdict()
                 break
-
-            print(profits, 'tle bi mogl neki bit')
-
 
             for r in result:
                 d = r.groupdict()
