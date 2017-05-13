@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'sem2017_evae',
         'HOST': 'baza.fmf.uni-lj.si',
-        'USER': 'public',
+        'USER': 'javnost',
         'PASSWORD': 'javnogeslo'
     },
     'default': {
