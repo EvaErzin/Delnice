@@ -8,19 +8,19 @@ class Company(Object):
         self.stockArray = None
         self.dataLoaded = preexisting
 
-#add exceptions and consider updating all data at every query
+#add exceptions and consider updating all data at every querry
     def update(self):
-        #access to yahoo query language library
+        #access to yahoo querry language library
         self.stockHandle = yfn.Share(self.ticker)
         # access to django class
         self.djangoHandle = Podjetje()
         if not self.dataLoaded:
             try:
-                self.djangoHandle.simbol = self. tickerSymbol
-                self.djangoHandle.polnoIme = self.stockHandle.get_name()
-                self.djangoHandle.lokacija = self.getLocation()
-                self.djangoHandle.panoga = self.getSector()
-                self.djangoHandle.ipo = self.getIpo()
+            self.djangoHandle.simbol = self. tickerSymbol
+            self.djangoHandle.polnoIme = self.stockHandle.get_name()
+            self.djangoHandle.lokacija = self.getLocation()
+            self.djangoHandle.panoga = self.getSector()
+            self.djangoHandle.ipo = self.getIpo()
             except:
                 return
             self.dataLoaded = True
