@@ -2,8 +2,6 @@ from django.core.management.base import BaseCommand, CommandError
 from DelniceWebApp.models import *
 import urllib.request
 import re
-from ._simboli import simboli
-
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -23,14 +21,11 @@ class Command(BaseCommand):
                 result = re.finditer(pattern, content)
                 result1 = re.finditer(pattern1, content)
             f.close()
-            print('f closed')
 
 
             for r in result1:
                 profits = r.groupdict()
                 break
-
-            print(profits, 'tle bi mogl neki bit')
 
 
             for r in result:
