@@ -2,10 +2,11 @@ from django.db import models
 from django.conf import settings
 
 class Podjetje(models.Model):
-    simbol = models.CharField(max_length=4, verbose_name='Simbol', primary_key=True)
+    simbol = models.CharField(max_length=8, verbose_name='Simbol', primary_key=True)
     polno_ime = models.TextField(verbose_name='Polno ime')
     lokacija = models.TextField(verbose_name='Lokacija')
-    panoga = models.TextField(verbose_name='Panoga')
+    panoga = models.TextField(verbose_name='Sektor')
+    industrija = models.TextField(verbose_name='Industrija')
     ipo = models.DateField(verbose_name='IPO')
 
 class PoslovniPodatki(models.Model):
