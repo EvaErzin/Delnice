@@ -1,33 +1,37 @@
 import yahoo_finance as yfn
-#from DelniceWebApp.models import *
+import DelniceWebApp.models as djangoModels
 import pandas as pd
 from pyquery import PyQuery
 from countries import countries
 
-class Company():
 
-    def __init__(self, ticker, preexisting, ipo = None, sector = None, industry = None):
-        self.tickerSymbol = ticker
+class Company:
+
+    def __init__(self, ticker, preexisting, ipo=None, sector=None, industry=None):
         self.stockArray = None
+        self.stockHandle = None
+        self.djangoPodjetje = None
+        self.djangoDelnica = None
+        self.lastStockDate = None
         self.handlesSet = False
+        self.tickerSymbol = ticker
         self.sector = sector
         self.industry = industry
         self.ipo = ipo
         self.dataLoaded = preexisting
 
+
 #add exceptions and consider updating all data at every querry
-    def update(self):
+    def setup(self):
         try:
             #access to yahoo querry language library
-            self.stockHandle = yfn.Share(self.ticker)
+            self.stockHandle = yfn.Share(self.tickerSymbol)
             #access to django class
-            self.djangoPodjetje = Podjetje()
-            self.djangoDelnica = Delnica()
+            self.djangoPodjetje = djangoModels.Podjetje(simbol=self.tickerSymbol)
 
             self.handlesSet = True
         except:
             print("Setting handles failes")
-
 
         if not self.dataLoaded and self.handlesSet:
             try:
@@ -42,15 +46,16 @@ class Company():
                     self.djangoPodjetje.ipo = self.ipo
 
                 self.djangoPodjetje.save()
+                print("{} added to database".format(self.stockHandle.get_name()))
             except:
                 print("Loading data failed")
                 return
             self.dataLoaded = True
-            self.lastStockDate = None
         else:
             pass
-            self.lastKnownDate = self.djangoDelnica.objects.filter(simbol = self.tickerSymbol).latest(datum).datum
+            self.lastStockDate = djangoModels.Delnica.objects.filter(simbol=self.tickerSymbol).latest('Datum').datum
 
+#add exception handling
     def getLocation(self):
         """Retrieves country data from yahoo finance webpage and extracts country"""
 
@@ -64,6 +69,8 @@ class Company():
         webAddr = info.pop()
         while info[-1][-1].isdigit():
             info.pop()
+
+        country = r"n\a"
         for i in range(1, len(info)):
             if " ".join(info[-i:]) in countries:
                 country = " ".join(info[-i:])
@@ -93,10 +100,21 @@ def convertMarketCap(capString):
 
 def getExistingCompanies():
     """Retrieves present companies from database"""
-    pass
+
+    companyList = djangoModels.Podjetje.objects.values_list('simbol', flat=True)
+
+    companyDict = {}
+    for i in companyList:
+        companyDict[i] = Company(i, True)
+        companyDict[i].setup()
+
+    print("Existing companies loaded form database.")
+
+    return companyDict
+
 
 #sort out exception handling
-def getTopCompanies(companyDict, N=500):
+def getTopCompanies(companyDict, N=500, forceUpdate = False):
     """Retrieves list of companies from NASDAQ website and adds top N to dataset"""
 
     nasdaqURL = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download"
@@ -104,29 +122,27 @@ def getTopCompanies(companyDict, N=500):
 
     # ['Symbol', 'MarketCap', 'IPOyear', 'Sector', 'industry']
     try:
-        nasdaq = pd.read_csv(nasdaqURL, sep = ",", header = 0, usecols = [0,3,4,5,6])
-        nyse = pd.read_csv(nyseURL, sep=",", header = 0, usecols = [0,3,4,5,6])
+        nasdaq = pd.read_csv(nasdaqURL, sep=",", header=0, usecols=[0, 3, 4, 5, 6])
+        nyse = pd.read_csv(nyseURL, sep=",", header=0, usecols=[0, 3, 4, 5, 6])
         nasdaq.set_index('Symbol')
         nyse.set_index('Symbol')
     except:
         print("csv retrieval failed")
         return None
 
-
     companies = pd.concat([nyse, nasdaq], verify_integrity=True, ignore_index=True)
     companies['MarketCap'] = companies['MarketCap'].map(lambda s : convertMarketCap(s))
     companies = companies.sort_values(by=["MarketCap"], ascending=False)
 
-
+    print("Company list successfully retrieved from NASDAQ website.")
 
     for i in companies[:N].itertuples():
-        if i[1] not in companyDict:
-            companyDict[i[1]] = Company(i[1], False, ipo = i[3], sector = i[4], industry=i[5])
-            companyDict[i[1]].update()
+        if i[1] not in companyDict or forceUpdate:
+            companyDict[i[1]] = Company(i[1], False, ipo=i[3], sector=i[4], industry=i[5])
+            companyDict[i[1]].setup()
 
     return companyDict
 
-getTopCompanies({})
 
 #GET EXISTING SHARES FROM DATABASE
 

@@ -3,9 +3,9 @@ from django.conf import settings
 
 class Podjetje(models.Model):
     simbol = models.CharField(max_length=8, verbose_name='Simbol', primary_key=True)
-    polno_ime = models.TextField(verbose_name='Polno ime')
+    polnoIme = models.TextField(verbose_name='Polno ime')
     lokacija = models.TextField(verbose_name='Lokacija')
-    panoga = models.TextField(verbose_name='Sektor')
+    sektor = models.TextField(verbose_name='Sektor')
     industrija = models.TextField(verbose_name='Industrija')
     ipo = models.DateField(verbose_name='IPO')
 
