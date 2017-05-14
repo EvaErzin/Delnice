@@ -36,7 +36,7 @@ class Command(BaseCommand):
                 prft = profits['profit{}q'.format(q)]
                 print(simbol, prft, rvn, year, q)
                 # bd = PoslovniPodatki()
-                # bd.simbol = simbol
+                # bd.simbol = podjetje
                 # bd.dobicek = prft
                 # bd.promet = rvn
                 # bd.leto = year
