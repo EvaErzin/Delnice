@@ -21,7 +21,6 @@ class Company:
         self.dataLoaded = preexisting
 
 
-#add exceptions and consider updating all data at every querry
     def setup(self):
         try:
             #access to yahoo querry language library
@@ -30,8 +29,8 @@ class Company:
             self.djangoPodjetje = djangoModels.Podjetje(simbol=self.tickerSymbol)
 
             self.handlesSet = True
-        except:
-            print("Setting handles failes")
+        except Exception as exc:
+            print("Setting handles failed: ", exc)
 
         if not self.dataLoaded and self.handlesSet:
             try:
@@ -47,13 +46,15 @@ class Company:
 
                 self.djangoPodjetje.save()
                 print("{} added to database".format(self.stockHandle.get_name()))
-            except:
-                print("Loading data failed")
+            except Exception as exc:
+                print("Pushing into database failed: ", exc)
                 return
             self.dataLoaded = True
         else:
-            pass
-            self.lastStockDate = djangoModels.Delnica.objects.filter(simbol=self.tickerSymbol).latest('Datum').datum
+            try:
+                self.lastStockDate = djangoModels.Delnica.objects.filter(simbol=self.tickerSymbol).latest('datum').datum
+            except:
+                print("Zadnji datum posodabljanja delnic za {} ni na voljo".format(self.tickerSymbol))
 
 #add exception handling
     def getLocation(self):
@@ -67,14 +68,20 @@ class Company:
 
         info = info.split(" ")
         webAddr = info.pop()
-        while info[-1][-1].isdigit():
-            info.pop()
 
-        country = r"n\a"
-        for i in range(1, len(info)):
-            if " ".join(info[-i:]) in countries:
-                country = " ".join(info[-i:])
-                # address = " ".join(info[:-1])
+        tempInfo = info
+        try:
+            while info[-1][-1].isdigit():
+                info.pop()
+
+            country = r"n\a"
+            for i in range(1, len(info)):
+                if " ".join(info[-i:]) in countries:
+                    country = " ".join(info[-i:])
+                    # address = " ".join(info[:-1])
+        except Exception as exc:
+            print(exc)
+            print(self.tickerSymbol, " - ", tempInfo)
 
         return country
 
@@ -108,7 +115,7 @@ def getExistingCompanies():
         companyDict[i] = Company(i, True)
         companyDict[i].setup()
 
-    print("Existing companies loaded form database.")
+    print("Existing companies loaded from database.\n")
 
     return companyDict
 
@@ -124,17 +131,16 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
     try:
         nasdaq = pd.read_csv(nasdaqURL, sep=",", header=0, usecols=[0, 3, 4, 5, 6])
         nyse = pd.read_csv(nyseURL, sep=",", header=0, usecols=[0, 3, 4, 5, 6])
-        nasdaq.set_index('Symbol')
-        nyse.set_index('Symbol')
-    except:
-        print("csv retrieval failed")
+    except Exception as exc:
+        print(".csv retrieval failed: ", exc)
         return None
 
-    companies = pd.concat([nyse, nasdaq], verify_integrity=True, ignore_index=True)
+    companies = pd.concat([nyse, nasdaq]).drop_duplicates(subset='Symbol')
     companies['MarketCap'] = companies['MarketCap'].map(lambda s : convertMarketCap(s))
     companies = companies.sort_values(by=["MarketCap"], ascending=False)
 
-    print("Company list successfully retrieved from NASDAQ website.")
+
+    print("Company list successfully retrieved from NASDAQ website.\n")
 
     for i in companies[:N].itertuples():
         if i[1] not in companyDict or forceUpdate:
@@ -143,11 +149,3 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
 
     return companyDict
 
-
-#GET EXISTING SHARES FROM DATABASE
-
-#SCRUB TOP n COMPANY NAMES
-
-#GET COMPANY DATA
-
-#PUSH COMPANY DATA INTO DATABASE
