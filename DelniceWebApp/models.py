@@ -7,7 +7,7 @@ class Podjetje(models.Model):
     lokacija = models.TextField(verbose_name='Lokacija')
     sektor = models.TextField(verbose_name='Sektor')
     industrija = models.TextField(verbose_name='Industrija')
-    ipo = models.DateField(verbose_name='IPO')
+    ipo = models.TextField(verbose_name='IPO')
 
 class PoslovniPodatki(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name='Simbol')
