@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    {% load i18n %}
     <meta charset="UTF-8">
     <title>Index</title>
 
@@ -15,7 +17,7 @@
 
 {% include 'navbar.html' %}
 {% if request.user.is_authenticated %}
-    <h1 align="center">Welcome <span style="color: firebrick">{{ user.get_username }}</span> !</h1>
+    <h1 align="center">{% trans "Dobrodošel/a" %} <span style="color: firebrick">{{ user.get_username }}</span> !</h1>
 {% endif %}
 </body>
 </html>

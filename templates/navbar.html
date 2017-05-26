@@ -1,3 +1,5 @@
+{% load i18n %}
+
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -8,13 +10,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Delnice</a>
+          <a class="navbar-brand" href= {% url 'Index' %}>{% trans 'Delnice' %}</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href= {% url 'Index' %}> Domov <span class="sr-only"></span></a></li>
+            <li><a href= {% url 'Index' %}> {% trans 'Domov' %} <span class="sr-only"></span></a></li>
 {#            <li><a href="{% url 'Delnice' %}">Delnice</a></li>#}
 {#            <li class="dropdown">#}
 {#              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Nakupi<span class="caret"></span></a>#}
@@ -26,9 +28,10 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
-                <li><a href= {% url 'logout' %}>Log Out</a></li>
+                <li><a href="#">{% trans 'Moj Portfolio' %}</a> </li>
+                <li><a href= {% url 'logout' %}>{% trans 'Odjava' %}</a></li>
             {% else %}
-                <li><a href= {% url 'login' %}>Log In</a></li>
+                <li><a href= {% url 'login' %}>{% trans 'Prijava' %}</a></li>
             {% endif %}
 
           </ul>

@@ -3,7 +3,7 @@ from DelniceWebApp.models import *
 import urllib.request as urre
 from bs4 import BeautifulSoup
 import re
-import datetime.date
+from datetime import date
 
 
 class Command(BaseCommand):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
             regex = re.compile(reg)
             results = re.search(regex, table)
             dat = results['exdate'].split('/')
-            datum = datetime.date(day=dat[1], month=dat[0], year=dat[2])
+            datum = date(day=dat[1], month=dat[0], year=dat[2])
             vrednost = results['cash']
             obstojeca = Dividenda.objects.filter(simbol=podjetje).latest('datum')
             if datum > obstojeca.datum:

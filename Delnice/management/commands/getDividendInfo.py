@@ -3,7 +3,7 @@ from DelniceWebApp.models import *
 import urllib.request as urre
 from bs4 import BeautifulSoup
 import re
-import datetime.date
+from datetime import date
 
 class Command(BaseCommand):
 
@@ -22,7 +22,7 @@ class Command(BaseCommand):
             for result in results:
                 gd = result.groupdict()
                 dat = gd['exdate'].split('/')
-                datum = datetime.date(day=dat[1], month=dat[0], year=dat[2])
+                datum = date(day=dat[1], month=dat[0], year=dat[2])
                 vrednost = gd['cash']
                 div = Dividenda(simbol = podjetje, datum=datum, vrednost=vrednost)
                 div.save()
