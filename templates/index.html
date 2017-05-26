@@ -12,7 +12,10 @@
 </head>
 <body>
 
-{% include 'navbar.html' %}
 
+{% include 'navbar.html' %}
+{% if request.user.is_authenticated %}
+    <h1 align="center">Welcome <span style="color: firebrick">{{ user.get_username }}</span> !</h1>
+{% endif %}
 </body>
 </html>
