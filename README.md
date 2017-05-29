@@ -8,4 +8,5 @@ Projekt pri predmetu Osnove podatkovnih baz
 ### Vir podatkov
 
 [Yahoo Finance](https://finance.yahoo.com/)
+
 [Nasdaq](http://www.nasdaq.com/)
