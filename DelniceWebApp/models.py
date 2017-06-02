@@ -22,10 +22,11 @@ class PoslovniPodatki(models.Model):
 class Delnica(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name='Simbol')
     datum = models.DateField(verbose_name='Datum')
-    odpiralni_tecaj = models.FloatField(verbose_name='Odpiralni tečaj')
-    uradni_tecaj = models.FloatField(verbose_name='Uradni tečaj')
-    volumen_trgovanja = models.IntegerField(verbose_name='Volumen trgovanja')
-    stevilo_delnic = models.IntegerField(verbose_name='Število vseh delnic')
+    odpiralniTecaj = models.FloatField(verbose_name='Odpiralni tečaj')
+    zapiralniTecaj = models.FloatField(verbose_name='Zapiralni tečaj')
+    nepopravljenZapiralniTecaj = models.FloatField(verbose_name='Nepopravjen zapiralni tečaj')
+    volumenTrgovanja = models.IntegerField(verbose_name='Volumen trgovanja')
+    steviloDelnic = models.IntegerField(verbose_name='Število vseh delnic')
 
     class __Meta__:
         unique_together = ('simbol', 'datum')

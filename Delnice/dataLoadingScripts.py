@@ -1,60 +1,65 @@
 import yahoo_finance as yfn
+import yahoo_quote_download.yahoo_quote_download.yqd as yqd
 import DelniceWebApp.models as djangoModels
 import pandas as pd
+import urllib
 from pyquery import PyQuery
-from countries import countries
-
+from Delnice.countries import countries
+import datetime
 
 class Company:
 
-    def __init__(self, ticker, preexisting, ipo=None, sector=None, industry=None):
-        self.stockArray = None
-        self.stockHandle = None
-        self.djangoPodjetje = None
-        self.djangoDelnica = None
+    def __init__(self, ticker, preexisting, fullName=None, ipo=None, sector=None, industry=None):
         self.lastStockDate = None
-        self.handlesSet = False
         self.tickerSymbol = ticker
+        self.fullName = fullName
         self.sector = sector
         self.industry = industry
         self.ipo = ipo
         self.dataLoaded = preexisting
 
 
+#add aditional attempts to handles
     def setup(self):
-        try:
-            #access to yahoo querry language library
-            self.stockHandle = yfn.Share(self.tickerSymbol)
-            #access to django class
-            self.djangoPodjetje = djangoModels.Podjetje(simbol=self.tickerSymbol)
+        """Loads last know stock date for existing stock and sets up new ones"""
 
-            self.handlesSet = True
-        except Exception as exc:
-            print("Setting handles failed: ", exc)
-
-        if not self.dataLoaded and self.handlesSet:
+        if not self.dataLoaded:
             try:
-                self.djangoPodjetje.simbol = self.tickerSymbol
-                self.djangoPodjetje.polnoIme = self.stockHandle.get_name()
-                self.djangoPodjetje.lokacija = self.getLocation()
-                if self.sector:
-                    self.djangoPodjetje.sektor = self.sector
-                if self.industry:
-                    self.djangoPodjetje.industrija = self.industry
-                if self.ipo:
-                    self.djangoPodjetje.ipo = self.ipo
+                #access to django class
+                djangoPodjetje = djangoModels.Podjetje(simbol=self.tickerSymbol)
+            except Exception as exc:
+                print("Setting django handle failed: ", exc)
+                return None
 
-                self.djangoPodjetje.save()
-                print("{} added to database".format(self.stockHandle.get_name()))
+            try:
+                djangoPodjetje.simbol = self.tickerSymbol
+                location = self.getLocation()
+                if location:
+                    djangoPodjetje.lokacija = location
+                else:
+                    print("Incomplete data for {}, company will not be added to database".format(self.tickerSymbol))
+                    return None
+                if self. fullName and self.sector and self.industry and self.ipo:
+                    djangoPodjetje.polnoIme = self.fullName
+                    djangoPodjetje.sektor = self.sector
+                    djangoPodjetje.industrija = self.industry
+                    djangoPodjetje.ipo = self.ipo
+                else:
+                    print("Incomplete data for {}, company will not be added to database".format(self.tickerSymbol))
+                    return None
+
+                djangoPodjetje.save()
+                print("{} added to database".format(self.fullName))
             except Exception as exc:
                 print("Pushing into database failed: ", exc)
-                return
+                return None
             self.dataLoaded = True
         else:
             try:
                 self.lastStockDate = djangoModels.Delnica.objects.filter(simbol=self.tickerSymbol).latest('datum').datum
             except:
-                print("Zadnji datum posodabljanja delnic za {} ni na voljo".format(self.tickerSymbol))
+                self.lastStockDate = None
+        return 1
 
 #add exception handling
     def getLocation(self):
@@ -69,21 +74,81 @@ class Company:
         info = info.split(" ")
         webAddr = info.pop()
 
-        tempInfo = info
-        try:
-            while info[-1][-1].isdigit():
-                info.pop()
+        if info == []:
+            print("No location data available for {}".format(self.tickerSymbol))
+            return None
 
-            country = r"n\a"
-            for i in range(1, len(info)):
-                if " ".join(info[-i:]) in countries:
-                    country = " ".join(info[-i:])
-                    # address = " ".join(info[:-1])
-        except Exception as exc:
-            print(exc)
-            print(self.tickerSymbol, " - ", tempInfo)
+        while info[-1][-1].isdigit():
+            info.pop()
+
+        country = r"n\a"
+        for i in range(1, len(info)):
+            if " ".join(info[-i:]) in countries:
+                country = " ".join(info[-i:])
+                # address = " ".join(info[:-1])
 
         return country
+
+#change to loading from oldest to newest
+    def loadStockData(self, startDate):
+        """Retrieves stock history since either the startDate or latest known update"""
+
+        def isoToPlain(iso):
+            return iso[:4]+iso[5:7]+iso[8:]
+
+        share = yfn.Share(self.tickerSymbol)
+
+        if self.lastStockDate == None:
+            start = startDate
+        elif (datetime.date.today() - self.lastStockDate).days <= 1:
+            return
+        else:
+            start = self.lastStockDate.isoformat()
+
+        #total volume calculated from current price and market cap
+        totalVolume = convertMarketCap(share.get_market_cap()) // float(share.get_price())
+
+        while True:
+            try:
+                stockArray = yqd.load_yahoo_quote(self.tickerSymbol, isoToPlain(start), isoToPlain(datetime.date.today().isoformat()))[1:][::-1]
+                splitArray = yqd.load_yahoo_quote(self.tickerSymbol, isoToPlain(start), isoToPlain(datetime.date.today().isoformat()), info = "split")[1:]
+                break
+            except urllib.error.HTTPError:
+                continue
+
+        splitDict = {}
+        for i in splitArray:
+            if i == '':
+                continue
+            data = i.split(',')
+            ratio = list(map(float, data[1].split("/")))
+            splitDict[data[0]] =ratio[0]/ratio[1]
+
+        year = ""
+        for i in stockArray:
+            if i == '':
+                continue
+
+            if data[0][:4] != year:
+                year = data[0][:4]
+                print(year)
+
+            data = i.split(',')
+
+            delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol), datum = datetime.date(int(data[0][:4]), int(data[0][5:7]), int(data[0][8:])))
+            delnica.odpiralniTecaj = float(data[1])
+            delnica.zapiralniTecaj = float(data[5])
+            delnica.nepopravljenZapiralniTecaj = float(data[4])
+            delnica.volumenTrgovanja = float(data[6])
+            delnica.steviloDelnic = int(totalVolume)
+            delnica.save()
+
+            if data[0] in splitDict:
+                totalVolume = round(totalVolume / splitDict[data[0]], 0)
+
+        print("Stock history between {} and {} loaded for {}".format(start, data[0], self.fullName))
+
+
 
 
 def convertMarketCap(capString):
@@ -127,10 +192,10 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
     nasdaqURL = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download"
     nyseURL = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download"
 
-    # ['Symbol', 'MarketCap', 'IPOyear', 'Sector', 'industry']
+    # ['Symbol', 'Name', 'MarketCap', 'IPOyear', 'Sector', 'industry']
     try:
-        nasdaq = pd.read_csv(nasdaqURL, sep=",", header=0, usecols=[0, 3, 4, 5, 6])
-        nyse = pd.read_csv(nyseURL, sep=",", header=0, usecols=[0, 3, 4, 5, 6])
+        nasdaq = pd.read_csv(nasdaqURL, sep=",", header=0, usecols=[0, 1, 3, 4, 5, 6])
+        nyse = pd.read_csv(nyseURL, sep=",", header=0, usecols=[0, 1, 3, 4, 5, 6])
     except Exception as exc:
         print(".csv retrieval failed: ", exc)
         return None
@@ -142,10 +207,23 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
 
     print("Company list successfully retrieved from NASDAQ website.\n")
 
+    failedCompanies = 0
     for i in companies[:N].itertuples():
         if i[1] not in companyDict or forceUpdate:
-            companyDict[i[1]] = Company(i[1], False, ipo=i[3], sector=i[4], industry=i[5])
-            companyDict[i[1]].setup()
+            companyDict[i[1]] = Company(i[1], False, fullName=i[2], ipo=i[4], sector=i[5], industry=i[6])
+            if companyDict[i[1]].setup() == None:
+                del companyDict[i[1]]
+                failedCompanies += 1
+
+    print("\nTop {} companies loaded into database with {} failures".format(N, failedCompanies))
 
     return companyDict
 
+def updateStockQuotes(companyDict, startDate = "2010-01-01"):
+    if companyDict == None:
+        return None
+    for i in companyDict:
+        try:
+            companyDict[i].loadStockData(startDate)
+        except Exception as exc:
+            print("Error loading stock data: ", exc)

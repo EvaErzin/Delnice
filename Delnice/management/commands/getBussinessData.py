@@ -12,9 +12,8 @@ class Command(BaseCommand):
             r'"grossProfit":.*?"longFmt":"(?P<profit4q>.+?)".*?"grossProfit":.*?"longFmt":"(?P<profit3q>.+?)".*?"grossProfit":.*?"longFmt":"(?P<profit2q>.+?)".*?"grossProfit":.*?"longFmt":"(?P<profit1q>.+?)".*?'
         )
 
-        ## for podjetje in Podjetja.objects.all():
-        ## simbol = podjetje.simbol
-        for simbol in ['YHOO']:
+        for podjetje in Podjetje.objects.all():
+            simbol = podjetje.simbol
             (filename, header) = urllib.request.urlretrieve('https://finance.yahoo.com/quote/{}/financials?p={}'.format(simbol, simbol))
             with open(filename, encoding='utf8') as f:
                 content = f.read()
@@ -34,14 +33,13 @@ class Command(BaseCommand):
                 [q, year] = map(int, date.split('Q'))
                 rvn = d['revenue']
                 prft = profits['profit{}q'.format(q)]
-                print(simbol, prft, rvn, year, q)
-                # bd = PoslovniPodatki()
-                # bd.simbol = podjetje
-                # bd.dobicek = prft
-                # bd.promet = rvn
-                # bd.leto = year
-                # bd.cetrtletje = q
-                # bd.save()
+                bd = PoslovniPodatki()
+                bd.simbol = podjetje
+                bd.dobicek = prft
+                bd.promet = rvn
+                bd.leto = year
+                bd.cetrtletje = q
+                bd.save()
 
             print('Done')
             return
