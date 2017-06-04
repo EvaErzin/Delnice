@@ -26,4 +26,7 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     url(r'^$', views.index, name='Index'),
     url('^', include('django.contrib.auth.urls')),
+    url('^register/', views.register, name="register"),
+    url('^portfolio/', views.portfolio, name="portfolio"),
+    url('^portfolio/(?P<simbol>.+)', views.portfolioDet, name='portfolioDetail')
 )

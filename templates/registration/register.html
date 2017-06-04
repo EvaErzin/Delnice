@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load i18n %}
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <title>{% trans "Registracija" %}</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static "Delnice/tableStyle.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "Delnice/background.css" %}">
+
+</head>
+<body style="background-color: firebrick">
+
+{% include 'navbar.html' %}
+
+<div style="text-align: center; padding-top: 150px" align="center">
+    <form method="post" action="">
+        {% csrf_token %}
+        <table align="center">
+            {%  for f in form %}
+                <tr>
+                    <td style="text-align: left; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px">{{ f.label_tag }}</td>
+                    <td style="text-align: right; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px"> {{ f }} </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <input class="btn btn-sample" type="submit" value={% blocktrans %} "Registriraj se!" {% endblocktrans %}/>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,28 +1,34 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from DelniceWebApp.models import *
-import urllib.request as urre
-from bs4 import BeautifulSoup
-import re
-from datetime import date
+import urllib.error
+import yahoo_quote_download.yahoo_quote_download.yqd as yqd
+from datetime import date, timedelta
 
 class Command(BaseCommand):
 
     def  handle(self, *args, **options):
 
         for podjetje in Podjetje.objects.all():
-            simbol = podjetje.simbol
-            resp = urre.urlopen('http://www.nasdaq.com/symbol/{}/dividend-history'.format(simbol))
-            cont = resp.read()
-            soup = BeautifulSoup(cont, 'html.parser')
-            table = soup.findAll('tbody')[1]
-            table = str(table)
-            reg = r'<span id="quotes_content_left_dividendhistoryGrid_exdate_\d+?">(?P<exdate>\d{1,2}/\d{1,2}/\d{4})</span>\s*?</td><td>.*?</td><td>\s*?<span id="quotes_content_left_dividendhistoryGrid_CashAmount_\d+?">(?P<cash>\d+?\.\d+?)</span>'
-            regex = re.compile(reg)
-            results = re.finditer(regex, table)
-            for result in results:
-                gd = result.groupdict()
-                dat = gd['exdate'].split('/')
-                datum = date(day=dat[1], month=dat[0], year=dat[2])
-                vrednost = gd['cash']
-                div = Dividenda(simbol = podjetje, datum=datum, vrednost=vrednost)
-                div.save()
+            symbol = podjetje.simbol
+            try:
+                startDate = Dividenda.objects.filter(simbol=podjetje).latest('datum').datum + timedelta(days=1)
+                startDate = startDate.isoformat().replace('-','')
+            except:
+                startDate = '20170101'
+            endDate = date.today().isoformat().replace('-','')
+
+            while True:
+                try:
+                    dividends = yqd.load_yahoo_quote(symbol, startDate, endDate, info='dividend')[1:]
+                    break
+                except urllib.error.HTTPError:
+                    continue
+
+            for result in dividends:
+                if result != '':
+                    result = result.split(',')
+                    datum = result[0].split('-')
+                    datum = date(year=int(datum[0]), month=int(datum[1]), day=int(datum[2]))
+                    value = float(result[1])
+                    d = Dividenda(simbol=podjetje, vrednost=value, datum=datum)
+                    d.save()

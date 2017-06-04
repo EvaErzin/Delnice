@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-27 17:06+0200\n"
+"POT-Creation-Date: 2017-06-02 11:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Slovenščina"
 msgid "English"
 msgstr "Angleščina"
 
-#: .\templates\index.html:20
+#: .\templates\index.html:19
 msgid "Dobrodošel/a"
 msgstr "Dobrodošel/a"
 
@@ -53,3 +53,35 @@ msgstr "Prijava"
 #: .\templates\navbar.html:50
 msgid "Go"
 msgstr "Pojdi"
+
+#: .\templates\registration\login.html:26
+msgid "Your username and password didn't match. Please try again."
+msgstr "Uporabniško ime in geslo se ne ujemata. Poskusi ponovno."
+
+#: .\templates\registration\login.html:42
+msgid "Login"
+msgstr "Vpis"
+
+#: .\templates\registration\login.html:47
+msgid "Izgubljeno geslo?"
+msgstr "Izgubljeno geslo?"
+
+#: .\templates\registration\login.html:48
+msgid "Brez računa?"
+msgstr "Brez računa?"
+
+#: .\templates\registration\login.html:48
+msgid "Registriraj se!"
+msgstr "Registriraj se!"
+
+#: .\templates\registration\register.html:6
+#, fuzzy
+#| msgid "Registriraj se!"
+msgid "Registracija"
+msgstr "Registracija"
+
+#: .\templates\registration\register.html:26
+#, fuzzy
+#| msgid "Registriraj se!"
+msgid " \"Registriraj se!\" "
+msgstr "Registriraj se!"

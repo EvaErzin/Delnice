@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+import django_tables2 as tables
+from django_tables2.utils import A
 
 class Podjetje(models.Model):
     simbol = models.CharField(max_length=8, verbose_name='Simbol', primary_key=True)
@@ -46,4 +48,14 @@ class Portfolio(models.Model):
     vrednost = models.FloatField(verbose_name='Vrednost')
     kolicina = models.IntegerField(verbose_name='Količina')
 
+class PortfolioTabela(tables.Table):
+    simbol = tables.LinkColumn('portfolioDetail', text= lambda record: record.simbol.simbol, args=[A('simbol.simbol')], empty_values=())
 
+    class Meta:
+        model = Portfolio
+        attrs = {'class': 'mytable', 'span': 'true'}
+        fields = ('simbol', 'datum', 'vrednost', 'kolicina')
+
+
+    def render_vrednost(self, value):
+        return round(value, 2)

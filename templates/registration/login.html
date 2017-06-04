@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    {% load i18n %}
+
     <meta charset="UTF-8">
     <title>Log In</title>
 
@@ -20,7 +23,7 @@
 
 <div align="center">
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p>{% trans "Your username and password didn't match. Please try again." %}</p>
 {% endif %}
 
 <form method="post" action="{% url 'login' %}">
@@ -36,13 +39,13 @@
 </tr>
 </table>
 
-<input type="submit" value="Login" />
+<input type="submit" value={% trans "Login" %} />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-<p>No account? <a href="{% url 'password_reset' %}">Register!</a></p>
+<p><a href="{% url 'password_reset' %}">{% trans "Izgubljeno geslo?" %}</a></p>
+<p>{% trans "Brez računa?" %} <a href="{% url 'register' %}">{% trans "Registriraj se!" %}</a></p>
 </div>
 {% endblock %}
 

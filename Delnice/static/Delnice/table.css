@@ -1,0 +1,131 @@
+table.mytable {
+    border-collapse: collapse;
+    border-color: #CCC;
+    border: 1px solid #DDD;
+    width: 100%;
+}
+
+table.mytable,
+table.mytable +  ul.pagination {
+    font: normal 11px/14px 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;
+}
+
+table.mytable a:link,
+table.mytable a:visited,
+table.mytable + ul.pagination > li > a {
+    color: firebrick;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+table.mytable td,
+table.mytable th {
+    padding: 10px;
+    line-height: 13px;
+    border-bottom: 1px solid #EEE;
+    border-left: 1px solid #DDD;
+    text-align: left;
+}
+
+table.mytable thead th:first-child,
+table.mytable thead td:first-child {
+    border-left: none !important;
+}
+
+table.mytable thead th,
+table.mytable thead td {
+    background: #FCFCFC url(img/header-bg.png) left bottom repeat-x;
+    border-bottom: 1px solid #DDD;
+    padding: 5px;
+    font-size: 11px;
+    vertical-align: middle;
+    color: firebrick;
+}
+
+table.mytable thead th > a:link,
+table.mytable thead th > a:visited {
+    color: firebrick;
+}
+
+table.mytable thead th.orderable > a {
+    padding-right: 20px;
+    background: url(img/arrow-inactive-up.png) right center no-repeat;
+}
+table.mytable thead th.orderable.asc > a {
+    background-image: url(img/arrow-active-up.png);
+}
+table.mytable thead th.orderable.desc > a {
+    background-image: url(img/arrow-active-down.png);
+}
+
+table.mytable tr.odd {
+    background-color: #EEEEEE;
+	color: firebrick;
+}
+
+table.mytable tr.even {
+    background-color: white;
+    color: black;
+}
+
+
+table.mytable + ul.pagination {
+    background: white url(img/pagination-bg.gif) left 180% repeat-x;
+    overflow: auto;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #DDD;
+    list-style: none;
+}
+
+table.mytable + ul.pagination > li {
+    float: left;
+    line-height: 22px;
+    margin-left: 10px;
+}
+
+table.mytable + ul.pagination > li:first-child {
+    margin-left: 0;
+}
+
+table.mytable + ul.pagination > li.cardinality {
+    float: right;
+    color: #8d8d8d;
+}
+
+table.mytable > tbody > tr > td > span.true,
+table.mytable > tbody > tr > td > span.false {
+    background-position: top left;
+    background-repeat: no-repeat;
+    height: 10px;
+    overflow: hidden;
+    text-indent: -200px;
+    width: 10px;
+}
+
+table.mytable > tbody > tr > td > .missing {
+    background: transparent url(img/missing.png) right center no-repeat;
+    color: #717171;
+    padding-right: 20px;
+}
+
+table.mytable > tbody > tr > td > .missing:hover {
+    color: #333;
+}
+
+table.mytable > tbody > tr > td > span.true {
+    background-image: url(img/true.gif);
+}
+
+table.mytable > tbody > tr > td > span.false {
+    background-image: url(img/false.gif);
+}
+
+div.table-container {
+    width: inherit;
+}
+
+tr.even > td.simbol > a {
+    color: black;
+}
+

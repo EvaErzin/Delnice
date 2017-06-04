@@ -1,22 +1,31 @@
+{% load i18n %}
+{% load django_tables2 %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-    {% load i18n %}
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>{% trans 'Portfolio' %}</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'Delnice/table.css' %}" />
+
+
+
 </head>
 <body>
 
 {% include 'navbar.html' %}
-{% if request.user.is_authenticated %}
-    <h1 align="center">{% trans "Dobrodošel/a" %} <span style="color: firebrick">{{ user.get_username }}</span> !</h1>
-{% endif %}
+
+
+{% render_table portfolio %}
+
+
 </body>
 </html>
