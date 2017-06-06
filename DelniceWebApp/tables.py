@@ -21,3 +21,15 @@ class PortfolioTabela1(tables.Table):
 
     def render_vrednost(self, value):
         return round(value, 3)
+
+class CompaniesTabela(tables.Table):
+    marketCap = tables.Column(verbose_name=_('Vrednost'))
+
+
+    class Meta:
+        model = Podjetje
+        attrs = {'class': 'mytable', 'span': 'true'}
+        fields = ('simbol', 'polnoIme', 'lokacija', 'sektor', 'industrija', 'ipo', 'marketCap')
+
+    def render_vrednost(self, value):
+        return round(value, 3)

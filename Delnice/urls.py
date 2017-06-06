@@ -28,5 +28,7 @@ urlpatterns += i18n_patterns(
     url('^', include('django.contrib.auth.urls')),
     url('^register/$', views.register, name="register"),
     url('^portfolio/$', views.portfolio, name="portfolio"),
-    url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed')
+    url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed'),
+    url('^companies/$', views.companyList, name="companyList")
+
 )

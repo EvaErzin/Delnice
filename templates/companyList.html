@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load django_tables2 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>{% trans 'Company List' %}</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'Delnice/table.css' %}" />
+
+
+
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<center><h1><b>{% trans 'Company List' %}</b></h1></center>
+
+{% render_table companies %}
+
+
+</body>
+</html>

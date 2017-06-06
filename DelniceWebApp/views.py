@@ -6,11 +6,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user
 from .models import *
 from .tables import *
-from django.db.models import Count, Min, Sum, Avg
+from django.db.models import Count, Min, Sum, Avg, F, DecimalField, ExpressionWrapper, Value
 from bokeh.plotting import figure
 from bokeh.embed import components
 from django.utils.translation import ugettext as _
 from bokeh.palettes import Viridis256 as pal #@UnresolvedImport
+from django_tables2 import RequestConfig
+import itertools
+
+
 
 # Create your views here.
 
@@ -113,3 +117,14 @@ def portfolioDetailed(request, simbol):
             'podjetje': podjetje,
         }
     return render(request, 'portfolioDetailed.html', context)
+
+def companyList(request):
+    lastDate = Delnica.objects.latest('datum').datum
+    companies = Podjetje.objects.select_related().filter(delnica__datum=lastDate).annotate(marketCap=ExpressionWrapper(F('delnica__steviloDelnic')*F('delnica__zapiralniTecaj'), output_field=DecimalField(decimal_places=1)))
+
+    table = CompaniesTabela(companies)
+    RequestConfig(request, paginate={'per_page':20}).configure(table)
+    context = {
+        'companies': table
+    }
+    return render(request, 'companyList.html', context)

@@ -56,6 +56,7 @@ class Company:
                 return None
             self.dataLoaded = True
         else:
+            self.fullName = djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol).polnoIme
             try:
                 self.lastStockDate = djangoModels.Delnica.objects.filter(simbol=self.tickerSymbol).latest('datum').datum
             except:
@@ -70,25 +71,16 @@ class Company:
 
         pq = PyQuery(url)
         #company data happens to be the first paragraph on the page
-        info = pq('p:first').text()
-
-        info = info.split(" ")
-        webAddr = info.pop()
-
-        if info == []:
-            print("No location data available for {}".format(self.tickerSymbol))
-            return None
-
-        while info[-1][-1].isdigit():
-            info.pop()
+        info = pq('p').contents()
 
         country = r"n\a"
-        for i in range(1, len(info)):
-            if " ".join(info[-i:]) in countries:
-                country = " ".join(info[-i:])
-                # address = " ".join(info[:-1])
-
-        return country
+        for i in info:
+            try:
+                if i in countries:
+                    country = i
+            except:
+                pass
+        return countryrun
 
 #change to loading from oldest to newest
     def loadStockData(self, startDate):
@@ -109,6 +101,7 @@ class Company:
         #total volume calculated from current price and market cap
         totalVolume = convertMarketCap(share.get_market_cap()) // float(share.get_price())
 
+        failedAttempts = 0
         while True:
             try:
                 stockArray = yqd.load_yahoo_quote(self.tickerSymbol, isoToPlain(start), isoToPlain(datetime.date.today().isoformat()))[1:][::-1]
@@ -116,6 +109,9 @@ class Company:
                 break
             except urllib.error.HTTPError:
                 time.sleep(1)
+                failedAttempts += 1
+                if failedAttempts == 5:
+                    print("Loading stock data for {} failed".format(self.tickerSymbol))
                 continue
 
         splitDict = {}
@@ -135,7 +131,7 @@ class Company:
 
             if data[0][:4] != year:
                 year = data[0][:4]
-                print(year)
+                print("Loading data for ", year)
 
             delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol), datum = datetime.date(int(data[0][:4]), int(data[0][5:7]), int(data[0][8:])))
             delnica.odpiralniTecaj = float(data[1])
@@ -166,7 +162,10 @@ def convertMarketCap(capString):
         elif capString[-1] == "M":
             coeficient = 10**6
 
-        return int(float(capString[1:-1]) * coeficient)
+        if capString[0].isdigit():
+            return int(float(capString[:-1]) * coeficient)
+        else:
+            return int(float(capString[1:-1]) * coeficient)
     except:
         #not interested in incorrectly defined companies
         return 0
@@ -232,10 +231,14 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
     return companyDict
 
 def updateStockQuotes(companyDict, startDate = "2000-01-01"):
+    """Updates stock data for all companies in companyDict starting at either the startDate or last know date"""
     if companyDict == None:
         return None
+    n = 0
     for i in companyDict:
+        n += 1
         try:
+            print("Loading stock data for {}  ({}/{})".format(i, n, len(companyDict)))
             companyDict[i].loadStockData(startDate)
         except Exception as exc:
             print("Error loading stock data: ", exc)
