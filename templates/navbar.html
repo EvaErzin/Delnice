@@ -28,7 +28,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
-                <li><a href="#">{% trans 'Moj Portfolio' %}</a> </li>
+                <li><a href={% url 'portfolio' %}>{% trans 'Moj Portfolio' %}</a> </li>
                 <li><a href= {% url 'logout' %}>{% trans 'Odjava' %}</a></li>
             {% else %}
                 <li><a href= {% url 'login' %}>{% trans 'Prijava' %}</a></li>

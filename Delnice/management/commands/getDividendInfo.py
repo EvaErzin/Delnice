@@ -14,7 +14,7 @@ class Command(BaseCommand):
                 startDate = Dividenda.objects.filter(simbol=podjetje).latest('datum').datum + timedelta(days=1)
                 startDate = startDate.isoformat().replace('-','')
             except:
-                startDate = '20170101'
+                startDate = '20100101'
             endDate = date.today().isoformat().replace('-','')
 
             while True:

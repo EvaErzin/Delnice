@@ -8,6 +8,16 @@
     <meta charset="UTF-8">
     <title>{% trans 'Portfolio' %}</title>
 
+        <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css"
+    rel="stylesheet" type="text/css">
+    <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.css"
+    rel="stylesheet" type="text/css">
+
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -23,6 +33,10 @@
 
 {% include 'navbar.html' %}
 
+        <div class="graf">
+            {{ div1 | safe}}
+            {{ scr1 | safe}}
+        </div>
 
 {% render_table portfolio %}
 
