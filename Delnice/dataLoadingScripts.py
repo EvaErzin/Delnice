@@ -80,7 +80,7 @@ class Company:
                     country = i
             except:
                 pass
-        return countryrun
+        return country
 
 #change to loading from oldest to newest
     def loadStockData(self, startDate):
