@@ -3,4 +3,4 @@ from ...dataLoadingScripts import *
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        updateStockQuotes(getTopCompanies(getExistingCompanies(), N = 1))
+        updateStockQuotes(getTopCompanies(getExistingCompanies()))

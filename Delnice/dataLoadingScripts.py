@@ -6,6 +6,7 @@ import urllib
 from pyquery import PyQuery
 from Delnice.countries import countries
 import datetime
+import time
 
 class Company:
 
@@ -114,6 +115,7 @@ class Company:
                 splitArray = yqd.load_yahoo_quote(self.tickerSymbol, isoToPlain(start), isoToPlain(datetime.date.today().isoformat()), info = "split")[1:]
                 break
             except urllib.error.HTTPError:
+                time.sleep(1)
                 continue
 
         splitDict = {}
@@ -129,11 +131,11 @@ class Company:
             if i == '':
                 continue
 
+            data = i.split(',')
+
             if data[0][:4] != year:
                 year = data[0][:4]
                 print(year)
-
-            data = i.split(',')
 
             delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol), datum = datetime.date(int(data[0][:4]), int(data[0][5:7]), int(data[0][8:])))
             delnica.odpiralniTecaj = float(data[1])
@@ -146,7 +148,7 @@ class Company:
             if data[0] in splitDict:
                 totalVolume = round(totalVolume / splitDict[data[0]], 0)
 
-        print("Stock history between {} and {} loaded for {}".format(start, data[0], self.fullName))
+        print("Stock history between {} and {} loaded for {}".format(data[0], datetime.date.today().isoformat(), self.fullName))
 
 
 
@@ -207,19 +209,29 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
 
     print("Company list successfully retrieved from NASDAQ website.\n")
 
-    failedCompanies = 0
-    for i in companies[:N].itertuples():
-        if i[1] not in companyDict or forceUpdate:
-            companyDict[i[1]] = Company(i[1], False, fullName=i[2], ipo=i[4], sector=i[5], industry=i[6])
-            if companyDict[i[1]].setup() == None:
-                del companyDict[i[1]]
-                failedCompanies += 1
+    first = 0
+    last = N
+    totalFailedCOmpanies = 0
+    while True:
+        failedCompanies = 0
+        for i in companies[first:last].itertuples():
+            if i[1] not in companyDict or forceUpdate:
+                companyDict[i[1]] = Company(i[1], False, fullName=i[2], ipo=i[4], sector=i[5], industry=i[6])
+                if companyDict[i[1]].setup() == None:
+                    del companyDict[i[1]]
+                    failedCompanies += 1
+        if failedCompanies != 0 and last+failedCompanies <= len(companies):
+            first = last
+            last = last + failedCompanies
+            totalFailedCOmpanies += failedCompanies
+        else:
+            break
 
     print("\nTop {} companies loaded into database with {} failures".format(N, failedCompanies))
 
     return companyDict
 
-def updateStockQuotes(companyDict, startDate = "2010-01-01"):
+def updateStockQuotes(companyDict, startDate = "2000-01-01"):
     if companyDict == None:
         return None
     for i in companyDict:
