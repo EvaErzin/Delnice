@@ -94,6 +94,7 @@ class Company:
         if self.lastStockDate == None:
             start = startDate
         elif (datetime.date.today() - self.lastStockDate).days <= 1:
+            print("Stock data for {} already up to date".format(self.fullName))
             return
         else:
             start = self.lastStockDate.isoformat()
@@ -142,26 +143,34 @@ class Company:
             if data[0][:4] != year:
                 year = data[0][:4]
                 print("Loading data for ", year)
-            try:
-                delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol),
-                                               datum = datetime.date(int(data[0][:4]), int(data[0][5:7]),
-                                                                     int(data[0][8:])))
-                delnica.odpiralniTecaj = float(data[1])
-                delnica.zapiralniTecaj = float(data[5])
-                delnica.nepopravljenZapiralniTecaj = float(data[4])
-                delnica.volumenTrgovanja = float(data[6])
-                delnica.steviloDelnic = int(totalVolume)
-                delnica.save()
-            except:
-                delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol),
-                                               datum=datetime.date(int(data[0][:4]), int(data[0][5:7]),
-                                                                   int(data[0][8:])))
-                delnica.odpiralniTecaj = float(0)
-                delnica.zapiralniTecaj = float(0)
-                delnica.nepopravljenZapiralniTecaj = float(0)
-                delnica.volumenTrgovanja = float(0)
-                delnica.steviloDelnic = int(0)
-                delnica.save()
+
+
+            for i in range(len(data)):
+                if data[i] == 'null':
+                    data[i] = '0'
+
+            failedAttempts = 0
+            while True:
+                try:
+                    delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol),
+                                                   datum = datetime.date(int(data[0][:4]), int(data[0][5:7]),
+                                                                         int(data[0][8:])))
+                    delnica.odpiralniTecaj = float(data[1])
+                    delnica.zapiralniTecaj = float(data[5])
+                    delnica.nepopravljenZapiralniTecaj = float(data[4])
+                    delnica.volumenTrgovanja = float(data[6])
+                    delnica.steviloDelnic = int(totalVolume)
+                    delnica.save()
+                    break
+                except Exception as exc:
+                    print(self.tickerSymbol, exc)
+                    print(data)
+                    time.sleep(0.5)
+                    failedAttempts += 1
+                    if failedAttempts == 5:
+                        print("Pushing data into database for {} failed".format(self.tickerSymbol))
+                        break
+                    continue
 
             if data[0] in splitDict:
                 totalVolume = round(totalVolume / splitDict[data[0]], 0)
