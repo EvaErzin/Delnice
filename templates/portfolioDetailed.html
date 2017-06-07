@@ -1,0 +1,58 @@
+{% load i18n %}
+{% load django_tables2 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans 'Portfolio' %}</title>
+
+    <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.css"
+    rel="stylesheet" type="text/css">
+    <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.css"
+    rel="stylesheet" type="text/css">
+
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'Delnice/table.css' %}" />
+
+</head>
+<body>
+
+{% include "navbar.html" %}
+    <h1 align="center">{{ podjetje.polnoIme }}</h1>
+    <div class="container">
+        <div class="graf" style="float: left">
+            {{ div1 | safe}}
+            {{ scr1 | safe}}
+        </div>
+        <div style="float: right">
+            <p>{% trans 'Povprečna vrednost kupljene delnice' %}:  {{ povp }} $</p>
+            <p>{% trans 'Trenutna vrednost delnice' %}:  {{ deln }} $</p>
+            <p>{% trans 'Skupaj plačano za delnice' %}: {{ skupna}} $</p>
+            <p>{% trans 'Skupna vrednost delnic' %}: {{ uradna }} $</p>
+            <p>{% trans 'Trenutni dobiček' %}: {{ prof }} $</p>
+
+            <form  method="GET" action={% url 'newPurchase' %}>
+              {% csrf_token %}
+              <input type="submit" action="" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
+              <input type="hidden" name="podjetje" value={{ podjetje }}>
+              <input type="hidden" name="vrednost" value="">
+            </form>
+
+        </div>
+    </div>
+    {% render_table portfolio %}
+
+</body>
+</html>

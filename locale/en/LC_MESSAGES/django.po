@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-02 11:05+0200\n"
+"POT-Creation-Date: 2017-06-07 23:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,13 +16,106 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\Delnice\settings.py:120
+#: .\DelniceWebApp\models.py:7 .\DelniceWebApp\models.py:15
+#: .\DelniceWebApp\models.py:25 .\DelniceWebApp\models.py:37
+#: .\DelniceWebApp\models.py:46 .\DelniceWebApp\tables.py:7
+msgid "Simbol"
+msgstr "Ticker"
+
+#: .\DelniceWebApp\models.py:8
+msgid "Polno ime"
+msgstr "Full name"
+
+#: .\DelniceWebApp\models.py:9
+msgid "Lokacija"
+msgstr "Location"
+
+#: .\DelniceWebApp\models.py:10
+msgid "Sektor"
+msgstr "Sector"
+
+#: .\DelniceWebApp\models.py:11
+msgid "Industrija"
+msgstr "Industry"
+
+#: .\DelniceWebApp\models.py:12
+msgid "IPO"
+msgstr ""
+
+#: .\DelniceWebApp\models.py:16
+msgid "Leto"
+msgstr "Year"
+
+#: .\DelniceWebApp\models.py:17
+msgid "Četrtletje"
+msgstr "Quarter"
+
+#: .\DelniceWebApp\models.py:18
+msgid "Promet"
+msgstr "Revenue"
+
+#: .\DelniceWebApp\models.py:19
+msgid "Dobicek"
+msgstr "Profit"
+
+#: .\DelniceWebApp\models.py:26 .\DelniceWebApp\models.py:38
+#: .\DelniceWebApp\models.py:47
+msgid "Datum"
+msgstr "Date"
+
+#: .\DelniceWebApp\models.py:27
+msgid "Odpiralni tečaj"
+msgstr "Open price"
+
+#: .\DelniceWebApp\models.py:28 .\DelniceWebApp\views.py:102
+#: .\DelniceWebApp\views.py:103
+msgid "Zapiralni tečaj"
+msgstr "Close price"
+
+#: .\DelniceWebApp\models.py:29
+msgid "Nepopravjen zapiralni tečaj"
+msgstr "Unadjusted close price"
+
+#: .\DelniceWebApp\models.py:30
+msgid "Volumen trgovanja"
+msgstr "Volume"
+
+#: .\DelniceWebApp\models.py:31
+msgid "Število vseh delnic"
+msgstr "Total number of stocks"
+
+#: .\DelniceWebApp\models.py:39 .\DelniceWebApp\models.py:48
+#: .\DelniceWebApp\tables.py:26
+msgid "Vrednost"
+msgstr "Value"
+
+#: .\DelniceWebApp\models.py:45
+msgid "Uporabnik"
+msgstr "User"
+
+#: .\DelniceWebApp\models.py:49
+msgid "Količina"
+msgstr "Amount"
+
+#: .\DelniceWebApp\tables.py:8
+msgid "Skupaj kupljeno"
+msgstr "Bought in total"
+
+#: .\DelniceWebApp\views.py:104 .\DelniceWebApp\views.py:105
+msgid "Povprečna vrednost kupljenih delnic"
+msgstr "Average price of bought stocks "
+
+#: .\Delnice\settings.py:121
 msgid "Slovenian"
 msgstr "Slovenian"
 
-#: .\Delnice\settings.py:121
+#: .\Delnice\settings.py:122
 msgid "English"
 msgstr "English"
+
+#: .\templates\companyList.html:9 .\templates\companyList.html:26
+msgid "Company List"
+msgstr ""
 
 #: .\templates\index.html:19
 msgid "Dobrodošel/a"
@@ -36,21 +129,55 @@ msgstr "Stocks"
 msgid "Domov"
 msgstr "Home"
 
-#: .\templates\navbar.html:31
+#: .\templates\navbar.html:20
+msgid "Seznam podjetij"
+msgstr "Company list"
+
+#: .\templates\navbar.html:32
 msgid "Moj Portfolio"
 msgstr "My Portfolio"
 
-#: .\templates\navbar.html:32
+#: .\templates\navbar.html:33
 msgid "Odjava"
 msgstr "Sign Out"
 
-#: .\templates\navbar.html:34
+#: .\templates\navbar.html:35
 msgid "Prijava"
 msgstr "Sign In"
 
-#: .\templates\navbar.html:50
+#: .\templates\navbar.html:51
 msgid "Go"
 msgstr "Go"
+
+#: .\templates\portfolio.html:9 .\templates\portfolioDetailed.html:9
+#, fuzzy
+#| msgid "Moj Portfolio"
+msgid "Portfolio"
+msgstr "My Portfolio"
+
+#: .\templates\portfolioDetailed.html:40
+msgid "Povprečna vrednost kupljene delnice"
+msgstr "Average stock price"
+
+#: .\templates\portfolioDetailed.html:41
+msgid "Trenutna vrednost delnice"
+msgstr "Current stock price"
+
+#: .\templates\portfolioDetailed.html:42
+msgid "Skupaj plačano za delnice"
+msgstr "Paid for stocks in total"
+
+#: .\templates\portfolioDetailed.html:43
+msgid "Skupna vrednost delnic"
+msgstr "Total value of stocks"
+
+#: .\templates\portfolioDetailed.html:44
+msgid "Trenutni dobiček"
+msgstr "Current profit"
+
+#: .\templates\portfolioDetailed.html:48
+msgid "'Nov nakup'"
+msgstr "New purchase"
 
 #: .\templates\registration\login.html:26
 msgid "Your username and password didn't match. Please try again."
@@ -72,13 +199,13 @@ msgstr "No account?"
 msgid "Registriraj se!"
 msgstr "Register!"
 
-#: .\templates\registration\register.html:6
+#: .\templates\registration\register.html:8
 #, fuzzy
 #| msgid "Registriraj se!"
 msgid "Registracija"
 msgstr "Registration"
 
-#: .\templates\registration\register.html:26
+#: .\templates\registration\register.html:35
 #, fuzzy
 #| msgid "Registriraj se!"
 msgid " \"Registriraj se!\" "

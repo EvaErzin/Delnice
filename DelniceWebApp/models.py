@@ -27,8 +27,8 @@ class Delnica(models.Model):
     odpiralniTecaj = models.FloatField(verbose_name=_('Odpiralni tečaj'))
     zapiralniTecaj = models.FloatField(verbose_name=_('Zapiralni tečaj'))
     nepopravljenZapiralniTecaj = models.FloatField(verbose_name=_('Nepopravjen zapiralni tečaj'))
-    volumenTrgovanja = models.IntegerField(verbose_name=_('Volumen trgovanja'))
-    steviloDelnic = models.IntegerField(verbose_name=_('Število vseh delnic'))
+    volumenTrgovanja = models.BigIntegerField(verbose_name=_('Volumen trgovanja'))
+    steviloDelnic = models.BigIntegerField(verbose_name=_('Število vseh delnic'))
 
     class __Meta__:
         unique_together = ('simbol', 'datum')
@@ -46,6 +46,6 @@ class Portfolio(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
     datum = models.DateField(verbose_name=_('Datum'))
     vrednost = models.FloatField(verbose_name=_('Vrednost'))
-    kolicina = models.IntegerField(verbose_name=_('Količina'))
+    kolicina = models.BigIntegerField(verbose_name=_('Količina'))
 
 
