@@ -98,8 +98,18 @@ class Company:
         else:
             start = self.lastStockDate.isoformat()
 
-        #total volume calculated from current price and market cap
-        totalVolume = convertMarketCap(share.get_market_cap()) // float(share.get_price())
+        failedAttempts = 0
+        while True:
+            try:
+                # total volume calculated from current price and market cap
+                totalVolume = convertMarketCap(share.get_market_cap()) // float(share.get_price())
+                break
+            except :
+                time.sleep(1)
+                failedAttempts += 1
+                if failedAttempts == 5:
+                    print("Loading stock data for {} failed".format(self.tickerSymbol))
+                continue
 
         failedAttempts = 0
         while True:
@@ -108,10 +118,10 @@ class Company:
                 splitArray = yqd.load_yahoo_quote(self.tickerSymbol, isoToPlain(start), isoToPlain(datetime.date.today().isoformat()), info = "split")[1:]
                 break
             except urllib.error.HTTPError:
-                time.sleep(1)
+                share = yfn.Share(self.tickerSymbol)
                 failedAttempts += 1
                 if failedAttempts == 5:
-                    print("Loading stock data for {} failed".format(self.tickerSymbol))
+                    print("Loading yahoo finance  for {} failed".format(self.tickerSymbol))
                 continue
 
         splitDict = {}
@@ -132,19 +142,32 @@ class Company:
             if data[0][:4] != year:
                 year = data[0][:4]
                 print("Loading data for ", year)
-
-            delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol), datum = datetime.date(int(data[0][:4]), int(data[0][5:7]), int(data[0][8:])))
-            delnica.odpiralniTecaj = float(data[1])
-            delnica.zapiralniTecaj = float(data[5])
-            delnica.nepopravljenZapiralniTecaj = float(data[4])
-            delnica.volumenTrgovanja = float(data[6])
-            delnica.steviloDelnic = int(totalVolume)
-            delnica.save()
+            try:
+                delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol),
+                                               datum = datetime.date(int(data[0][:4]), int(data[0][5:7]),
+                                                                     int(data[0][8:])))
+                delnica.odpiralniTecaj = float(data[1])
+                delnica.zapiralniTecaj = float(data[5])
+                delnica.nepopravljenZapiralniTecaj = float(data[4])
+                delnica.volumenTrgovanja = float(data[6])
+                delnica.steviloDelnic = int(totalVolume)
+                delnica.save()
+            except:
+                delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=self.tickerSymbol),
+                                               datum=datetime.date(int(data[0][:4]), int(data[0][5:7]),
+                                                                   int(data[0][8:])))
+                delnica.odpiralniTecaj = float(0)
+                delnica.zapiralniTecaj = float(0)
+                delnica.nepopravljenZapiralniTecaj = float(0)
+                delnica.volumenTrgovanja = float(0)
+                delnica.steviloDelnic = int(0)
+                delnica.save()
 
             if data[0] in splitDict:
                 totalVolume = round(totalVolume / splitDict[data[0]], 0)
 
-        print("Stock history between {} and {} loaded for {}".format(data[0], datetime.date.today().isoformat(), self.fullName))
+        print("Stock history between {} and {} loaded for {}".format(data[0],
+                                                                     datetime.date.today().isoformat(), self.fullName))
 
 
 
@@ -226,7 +249,7 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
         else:
             break
 
-    print("\nTop {} companies loaded into database with {} failures".format(N, failedCompanies))
+    print("\nTop {} companies loaded into database with {} failures\n".format(N, failedCompanies))
 
     return companyDict
 
