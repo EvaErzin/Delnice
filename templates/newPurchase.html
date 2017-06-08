@@ -1,0 +1,55 @@
+{% load i18n %}
+{% load django_tables2 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans 'Nov Nakup' %}</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src={% static "Delnice/js/bootstrap-datepicker.js" %}></script>
+
+    <link rel="stylesheet" href=" {% static 'Delnice/bootstrap-datepicker.css' %}">
+
+    <link rel="stylesheet" href="{% static 'Delnice/table.css' %}" />
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<h1 align="center"> {% trans 'Nov Nakup' %} </h1>
+
+<div style="text-align: center; padding-top: 150px" align="center">
+    <form method="post" action="">
+        {% csrf_token %}
+        <table align="center">
+            {%  for f in form.visible_fields %}
+                <tr>
+                    <td style="text-align: left; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px">{{ f.label_tag }}</td>
+                    <td style="text-align: right; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px"> {{ f }} </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+        <input class="btn btn-sample" type="submit" value={% blocktrans %} "Shrani!" {% endblocktrans %}/>
+    </form>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('.datepicker').datepicker({
+        format: 'dd.mm.yyyy'
+});
+});
+</script>
+
+</body>
+</html>

@@ -1,3 +1,7 @@
 body {
-    background-image: url('http://fbcwinn.com/hp_wordpress/wp-content/uploads/2016/06/y9u8ugez.jpg') !important;
+    background-image: url(img/4757.jpg) !important;
+}
+
+footer > a {
+    color: #8d8d8d;
 }

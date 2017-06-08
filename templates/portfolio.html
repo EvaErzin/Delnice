@@ -9,14 +9,14 @@
     <title>{% trans 'Portfolio' %}</title>
 
         <link
-    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css"
+    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.css"
     rel="stylesheet" type="text/css">
     <link
-    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.css"
+    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.css"
     rel="stylesheet" type="text/css">
 
-    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
-    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
@@ -31,12 +31,18 @@
 </head>
 <body>
 
+<style>
+
+</style>
+
 {% include 'navbar.html' %}
 
-        <div class="graf">
+    <h1 align="center"> {% trans 'Moj Portfolio' %}</h1>
+        <div class="graf" align="center">
             {{ div | safe}}
             {{ scr | safe}}
         </div>
+
 
 {% render_table portfolio %}
 

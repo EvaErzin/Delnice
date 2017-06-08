@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="{% static "Delnice/tableStyle.css" %}" >
+
     <link rel="stylesheet" type="text/css" href="{% static "Delnice/background.css" %}">
 
 </head>
@@ -26,10 +26,10 @@
         {% csrf_token %}
         <table align="center">
             {%  for f in form %}
-                <tr>
-                    <td style="text-align: left; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px">{{ f.label_tag }}</td>
-                    <td style="text-align: right; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px"> {{ f }} </td>
-                </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px">{{ f.label_tag }}</td>
+                        <td style="text-align: right; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px"> {{ f }} </td>
+                    </tr>
             {% endfor %}
         </table>
         <input class="btn btn-sample" type="submit" value={% blocktrans %} "Registriraj se!" {% endblocktrans %}/>
@@ -37,4 +37,5 @@
 </div>
 
 </body>
+<footer style="position: absolute; right: 0; bottom: 0; left:0"> <a href="http://www.freepik.com/free-photos-vectors/background">Background vector created by Kjpargeter - Freepik.com</a></footer>
 </html>

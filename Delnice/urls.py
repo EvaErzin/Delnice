@@ -32,4 +32,7 @@ urlpatterns += i18n_patterns(
     url('^companies/$', views.companyList, name="companyList"),
     url('^companies/(?P<simbol>.+?)$', views.companyDetails, name="companyDetails")
 
+    url('^companies/$', views.companyList, name="companyList"),
+    url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed'),
+    url('^novNakup/$', views.newPurchase, name='newPurchase')
 )

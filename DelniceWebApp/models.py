@@ -11,6 +11,9 @@ class Podjetje(models.Model):
     industrija = models.TextField(verbose_name=_('Industrija'))
     ipo = models.TextField(verbose_name=_('IPO'))
 
+    def __str__(self):
+        return self.simbol
+
 class PoslovniPodatki(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
     leto = models.IntegerField(verbose_name=_('Leto'))
@@ -20,6 +23,9 @@ class PoslovniPodatki(models.Model):
 
     class __Meta__:
         unique_together = ('simbol', 'leto', 'cetrtletje')
+
+    def __str__(self):
+        return self.simbol
 
 class Delnica(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
@@ -33,6 +39,9 @@ class Delnica(models.Model):
     class __Meta__:
         unique_together = ('simbol', 'datum')
 
+    def __str__(self):
+        return self.simbol
+
 class Dividenda(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
     datum = models.DateField(verbose_name=_('Datum'))
@@ -41,6 +50,9 @@ class Dividenda(models.Model):
     class __Meta__:
         unique_together = ('simbol', 'datum')
 
+    def __str__(self):
+        return self.simbol
+
 class Portfolio(models.Model):
     uporabnik = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Uporabnik'))
     simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
@@ -48,4 +60,5 @@ class Portfolio(models.Model):
     vrednost = models.FloatField(verbose_name=_('Vrednost'))
     kolicina = models.BigIntegerField(verbose_name=_('Količina'))
 
-
+    def __str__(self):
+        return self.simbol
