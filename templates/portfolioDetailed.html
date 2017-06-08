@@ -45,7 +45,7 @@
 
             <form  method="GET" action={% url 'newPurchase' %}>
               {% csrf_token %}
-              <input type="submit" action="" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
+              <input type="submit" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
               <input type="hidden" name="podjetje" value={{ podjetje }}>
               <input type="hidden" name="vrednost" value="">
             </form>

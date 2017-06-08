@@ -29,6 +29,7 @@ urlpatterns += i18n_patterns(
     url('^register/$', views.register, name="register"),
     url('^portfolio/$', views.portfolio, name="portfolio"),
     url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed'),
-    url('^companies/$', views.companyList, name="companyList")
-
+    url('^companies/$', views.companyList, name="companyList"),
+    url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed'),
+    url('^novNakup/$', views.newPurchase, name='newPurchase')
 )
