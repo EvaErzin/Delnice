@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template import loader
@@ -179,7 +179,7 @@ def companyDetails(request, simbol):
     context = {
         'scr': script,
         'div': div,
-        'portfolio': table,
+        'delnice': table,
         'podjetje': podjetje
     }
     return render(request, 'companyDetails.html', context)

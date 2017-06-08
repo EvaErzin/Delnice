@@ -30,9 +30,6 @@ urlpatterns += i18n_patterns(
     url('^portfolio/$', views.portfolio, name="portfolio"),
     url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed'),
     url('^companies/$', views.companyList, name="companyList"),
-    url('^companies/(?P<simbol>.+?)$', views.companyDetails, name="companyDetails")
-
-    url('^companies/$', views.companyList, name="companyList"),
-    url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed'),
+    url('^companies/(?P<simbol>.+?)$', views.companyDetails, name='companyDetails'),
     url('^novNakup/$', views.newPurchase, name='newPurchase')
 )
