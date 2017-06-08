@@ -88,7 +88,7 @@ msgstr ""
 
 #: .\DelniceWebApp\models.py:39 .\DelniceWebApp\models.py:48
 #: .\DelniceWebApp\tables.py:26
-msgid "Vrednost"
+msgid "Vrednost [M$]"
 msgstr ""
 
 #: .\DelniceWebApp\models.py:45
