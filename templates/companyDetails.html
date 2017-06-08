@@ -1,0 +1,45 @@
+{% load i18n %}
+{% load django_tables2 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ podjetje.polnoIme }}</title>
+
+    <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.css"
+    rel="stylesheet" type="text/css">
+    <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.css"
+    rel="stylesheet" type="text/css">
+
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'Delnice/table.css' %}" />
+
+</head>
+<body>
+
+{% include "navbar.html" %}
+    <h1 align="center">{{ podjetje.polnoIme }}</h1>
+    <div class="container">
+        <div class="graf" style="float: left">
+            {{ div | safe}}
+            {{ scr | safe}}
+        </div>
+        <div style="float: right">
+        </div>
+    </div>
+    {% render_table portfolio %}
+
+</body>
+</html>

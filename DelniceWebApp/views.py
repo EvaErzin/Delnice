@@ -8,6 +8,7 @@ from .models import *
 from .tables import *
 from django.db.models import Count, Min, Sum, Avg, F, DecimalField, ExpressionWrapper, Value
 from bokeh.plotting import figure
+from bokeh.models import DatetimeTickFormatter
 from bokeh.embed import components
 from django.utils.translation import ugettext as _
 from bokeh.palettes import Viridis256 as pal #@UnresolvedImport
@@ -128,3 +129,26 @@ def companyList(request):
         'companies': table
     }
     return render(request, 'companyList.html', context)
+
+def companyDetails(request, simbol):
+    podjetje = Podjetje.objects.get(simbol=simbol)
+    stock = Delnica.objects.filter(simbol=simbol)
+    values = stock.values_list('zapiralniTecaj')
+    dates = stock.values_list('datum')
+    dates = [i[0] for i in dates]
+
+    plot = figure(plot_width=600, plot_height=400, x_axis_type='datetime')
+    # plot.circle(dates,values, size=2, line_color = 'firebrick')
+    plot.line(dates,values, line_width=1, line_color = 'firebrick')
+    plot.xaxis.formatter = DatetimeTickFormatter(days=["%d %B %Y"])
+    plot.xaxis.major_label_orientation = 'horizontal'
+    script, div = components(plot)
+    table = CompanyDetailsTabela(stock)
+    RequestConfig(request, paginate={'per_page': 50}).configure(table)
+    context = {
+        'scr': script,
+        'div': div,
+        'portfolio': table,
+        'podjetje': podjetje
+    }
+    return render(request, 'companyDetails.html', context)
