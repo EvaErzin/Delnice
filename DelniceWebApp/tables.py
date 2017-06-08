@@ -24,7 +24,7 @@ class PortfolioTabela1(tables.Table):
 
 class CompaniesTabela(tables.Table):
     simbol = tables.LinkColumn('companyDetails', args=[A('simbol')], verbose_name=_('Simbol'))
-    marketCap = tables.Column(verbose_name=_('Vrednost'))
+    marketCap = tables.Column(verbose_name=_('Vrednost [M$]'))
 
 
     class Meta:

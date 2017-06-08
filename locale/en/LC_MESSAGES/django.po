@@ -86,8 +86,8 @@ msgstr "Total number of stocks"
 
 #: .\DelniceWebApp\models.py:39 .\DelniceWebApp\models.py:48
 #: .\DelniceWebApp\tables.py:26
-msgid "Vrednost"
-msgstr "Value"
+msgid "Vrednost [M$]"
+msgstr "Value [M$]"
 
 #: .\DelniceWebApp\models.py:45
 msgid "Uporabnik"

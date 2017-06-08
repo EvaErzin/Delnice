@@ -7,7 +7,7 @@ from django.contrib.auth import get_user
 from .models import *
 from .forms import *
 from .tables import *
-from django.db.models import Count, Min, Sum, Avg, F, DecimalField, ExpressionWrapper, Value
+from django.db.models import Count, Min, Sum, Avg, F, DecimalField, ExpressionWrapper, Value, IntegerField
 from bokeh.plotting import figure
 from bokeh.models import DatetimeTickFormatter
 from bokeh.embed import components
@@ -152,7 +152,7 @@ def portfolioDetailed(request, simbol):
 
 def companyList(request):
     lastDate = Delnica.objects.latest('datum').datum
-    companies = Podjetje.objects.select_related().filter(delnica__datum=lastDate).annotate(marketCap=ExpressionWrapper(F('delnica__steviloDelnic')*F('delnica__zapiralniTecaj'), output_field=DecimalField(decimal_places=1)))
+    companies = Podjetje.objects.select_related().filter(delnica__datum=lastDate).annotate(marketCap=ExpressionWrapper(F('delnica__steviloDelnic')*F('delnica__zapiralniTecaj') /1000000, output_field=IntegerField()))
 
     table = CompaniesTabela(companies)
     RequestConfig(request, paginate={'per_page':20}).configure(table)
