@@ -30,13 +30,20 @@
 <body>
 
 {% include "navbar.html" %}
-    <h1 align="center">{{ podjetje.polnoIme }}</h1>
+    <h1 align="center">{{ podjetje.polnoIme }} </h1>
+    <div align="center"><form  method="GET" action={% url 'newPurchase' %}>
+              {% csrf_token %}
+              <input type="submit" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
+              <input type="hidden" name="podjetje" value={{ podjetje }}>
+              <input type="hidden" name="vrednost" value={{ zadnjaVrednost }}>
+            </form></div>
     <div class="container">
         <div class="graf" style="float: left">
             {{ div | safe}}
             {{ scr | safe}}
         </div>
         <div style="float: right">
+
         </div>
     </div>
     {% render_table delnice %}

@@ -165,6 +165,7 @@ def companyDetails(request, simbol):
     podjetje = Podjetje.objects.get(simbol=simbol)
     stock = Delnica.objects.filter(simbol=simbol)
     values = stock.values_list('zapiralniTecaj')
+    value = stock.latest('datum').zapiralniTecaj
     dates = stock.values_list('datum')
     dates = [i[0] for i in dates]
 
@@ -180,7 +181,8 @@ def companyDetails(request, simbol):
         'scr': script,
         'div': div,
         'delnice': table,
-        'podjetje': podjetje
+        'podjetje': podjetje,
+        'zadnjaVrednost' : value
     }
     return render(request, 'companyDetails.html', context)
 
