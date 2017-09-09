@@ -25,7 +25,7 @@
 
 {% include 'navbar.html' %}
 
-<h1 align="center"> {% trans 'Nov Nakup' %} </h1>
+<h1 align="center"><strong>{% trans 'Nov Nakup' %} </strong></h1>
 
 <div style="text-align: center; padding-top: 150px" align="center">
     <form method="post" action="">
@@ -39,7 +39,7 @@
             {% endfor %}
 
         </table>
-        <input class="btn btn-sample" type="submit" value={% blocktrans %} "Shrani!" {% endblocktrans %}/>
+        <input class="btn btn-danger" type="submit" value={% blocktrans %} "Shrani!" {% endblocktrans %}/>
     </form>
 </div>
 

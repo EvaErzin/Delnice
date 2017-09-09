@@ -30,6 +30,7 @@
 
 </head>
 <body>
+<meta content="text/html">
 
 <style>
 
@@ -37,13 +38,35 @@
 
 {% include 'navbar.html' %}
 
-    <h1 align="center"> {% trans 'Moj Portfolio' %}</h1>
-        <div class="graf" align="center">
+    <h1 align="center"><strong>{% trans 'Moj Portfolio' %}</strong></h1>
+    <br>
+        <div class="container">
+        <div class="graf" style="float: left">
             {{ div | safe}}
             {{ scr | safe}}
         </div>
+    <div class="panel panel-default">
+        <div class="panel-body" align="center" style="padding-top: 100px">
+            <p>{% trans 'Skupaj plačano za delnice' %}:  <strong>{{ sk_cena }} $</strong></p>
+            <p>{% trans 'Trenutna vrednost delnic' %}:  <strong>{{ sk_vrednost }} $</strong></p>
+            {% if sk_vrednost >= sk_cena %}
+                <p>{% trans 'Trenutni dobiček' %}: <strong>{{ diffp}} $</strong></p>
+            {% else %}
+                <p>{% trans 'Trenutna izguba' %}: <strong>{{ diffn }} $</strong></p>
+            {% endif %}
 
+            <form  method="GET" align="center" action={% url 'newPurchase' %}>
+              {% csrf_token %}
+              <input type="submit" class="btn btn-danger" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
+              <input type="hidden" name="podjetje" value={{ podjetje }}>
+              <input type="hidden" name="vrednost" value="">
+            </form>
 
+        </div>
+    </div>
+    </div>
+
+<br>
 {% render_table portfolio %}
 
 

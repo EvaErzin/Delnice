@@ -28,30 +28,35 @@
 
 </head>
 <body>
+<meta content="text/html">
 
 {% include "navbar.html" %}
-    <h1 align="center">{{ podjetje.polnoIme }}</h1>
+    <h1 align="center"><strong>{{ podjetje.polnoIme }}</strong></h1>
+    <br>
     <div class="container">
         <div class="graf" style="float: left">
             {{ div1 | safe}}
             {{ scr1 | safe}}
         </div>
-        <div style="float: right">
-            <p>{% trans 'Povprečna vrednost kupljene delnice' %}:  {{ povp }} $</p>
-            <p>{% trans 'Trenutna vrednost delnice' %}:  {{ deln }} $</p>
-            <p>{% trans 'Skupaj plačano za delnice' %}: {{ skupna}} $</p>
-            <p>{% trans 'Skupna vrednost delnic' %}: {{ uradna }} $</p>
-            <p>{% trans 'Trenutni dobiček' %}: {{ prof }} $</p>
+    <div class="panel panel-default">
+        <div class="panel-body" align="center" style="padding-top: 100px">
+            <p>{% trans 'Povprečna vrednost kupljene delnice' %}:  <strong>{{ povp }} $</strong></p>
+            <p>{% trans 'Trenutna vrednost delnice' %}:  <strong>{{ deln }} $</strong></p>
+            <p>{% trans 'Skupaj plačano za delnice' %}: <strong>{{ skupna}} $</strong></p>
+            <p>{% trans 'Skupna vrednost delnic' %}: <strong>{{ uradna }} $</strong></p>
+            <p>{% trans 'Trenutni dobiček' %}: <strong>{{ prof }} $</strong></p>
 
-            <form  method="GET" action={% url 'newPurchase' %}>
+            <form  method="GET" align="center" action={% url 'newPurchase' %}>
               {% csrf_token %}
-              <input type="submit" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
+              <input type="submit" class="btn btn-danger" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
               <input type="hidden" name="podjetje" value={{ podjetje }}>
               <input type="hidden" name="vrednost" value="">
             </form>
 
         </div>
     </div>
+    </div>
+<br>
     {% render_table portfolio %}
 
 </body>

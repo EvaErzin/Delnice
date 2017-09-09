@@ -8,21 +8,27 @@ class Command(BaseCommand):
 
     def  handle(self, *args, **options):
 
+        i = 1
         for podjetje in Podjetje.objects.all():
             symbol = podjetje.simbol
+            print('Starting {}'.format(symbol))
             try:
                 startDate = Dividenda.objects.filter(simbol=podjetje).latest('datum').datum + timedelta(days=1)
                 startDate = startDate.isoformat().replace('-','')
             except:
-                startDate = '20000101'
+                startDate = '20150101'
             endDate = date.today().isoformat().replace('-','')
 
+            j = 1
             while True:
                 try:
                     dividends = yqd.load_yahoo_quote(symbol, startDate, endDate, info='dividend')[1:]
                     break
                 except urllib.error.HTTPError:
-                    continue
+                    if j == 5:
+                        print('Could not load yahoo finance share for {}'.format(symbol))
+                        break
+                    j += 1
 
             for result in dividends:
                 if result != '':
@@ -32,3 +38,6 @@ class Command(BaseCommand):
                     value = float(result[1])
                     d = Dividenda(simbol=podjetje, vrednost=value, datum=datum)
                     d.save()
+
+            print('Finished {} out of 100.'.format(i))
+            i+=1

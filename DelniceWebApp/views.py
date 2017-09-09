@@ -14,6 +14,8 @@ from bokeh.embed import components
 from django.utils.translation import ugettext as _
 from bokeh.palettes import Viridis256 as pal #@UnresolvedImport
 from django_tables2 import RequestConfig
+import time
+import numpy as np
 import itertools
 
 
@@ -46,41 +48,34 @@ def portfolio(request):
     if user.is_anonymous:
         return redirect('login')
     else:
+        d = Delnica.objects.all()
         portf = Portfolio.objects.filter(uporabnik=user)
         portf1 = portf.values('simbol').annotate(kolicinaSkupaj=Sum('kolicina'))
-        simboli = portf.values('simbol').distinct()
         slovar = {}
-        datumi = []
+        simboli = portf.distinct('simbol').values('simbol')
+        datumi = d.order_by('datum').values_list('datum').distinct()
+        datumi = np.array(datumi)
+        sk_cena = 0
+        sk_vrednost = 0
         for simbol in simboli:
-            zapravljeno = 0
-            kolicina = 0
-            podjetje = Podjetje.objects.get(simbol=simbol['simbol'])
-            nakupi = portf.filter(simbol=podjetje)
-            delnice = Delnica.objects.filter(simbol=podjetje)
-            datumi = Delnica.objects.all().order_by('-datum').values('datum').distinct()[:80][::-1]
-            datumi = [i['datum'] for i in datumi]
-            profiti = []
-            nak = nakupi.filter(datum__lt=datumi[0])
-            for n in nak:
-                zapravljeno += n.kolicina * n.vrednost
-                kolicina += n.kolicina
-            for datum in datumi:
-                nak = nakupi.filter(datum=datum)
-                for n in nak:
-                    zapravljeno += n.kolicina * n.vrednost
-                    kolicina += n.kolicina
-                try:
-                    zapiralni = delnice.get(datum=datum).zapiralniTecaj
-                except Delnica.DoesNotExist:
-                    zapiralni = 0
-                profiti.append(kolicina*zapiralni - zapravljeno)
-            slovar[simbol['simbol']] = profiti
+            n = np.array(portf.filter(simbol=simbol['simbol']).order_by('datum').values_list('kolicina', 'vrednost', 'datum'))
+            rez = None
+            for nak in n:
+                if rez is not None:
+                    rez = rez + np.where(datumi> nak[2], np.array([nak[0]*nak[1],nak[0]]), 0)
+                else:
+                    rez = np.where(datumi> nak[2], np.array([nak[0]*nak[1],nak[0]]), 0)
+                sk_cena += nak[0] * nak[1]
+                sk_vrednost += nak[0] * d.filter(simbol=simbol['simbol']).latest('datum').zapiralniTecaj
+            temp = np.transpose(np.array(d.filter(simbol=simbol['simbol']).order_by('datum').values_list('zapiralniTecaj').distinct()))*rez[:,1] - rez[:,0]
+            slovar[simbol['simbol']] = list(temp.flatten())
+        datumi = datumi.flatten()
+
         plot = figure(plot_width=600, plot_height=400, x_axis_type='datetime')
         for simbol, barva in zip(simboli, pal[::256//len(simboli)]):
-            simbol = simbol['simbol']
-            plot.line(datumi,slovar[simbol], line_width=2, color=barva, legend=simbol)
+            plot.line(datumi,slovar[simbol['simbol']], line_width=1, color=barva, legend=simbol['simbol'])
         skupaj = [sum([list[i] for list in slovar.values()]) for i in range(len(datumi))]
-        plot.line(datumi, skupaj, line_width=4, color='firebrick', legend=_('Profit'))
+        plot.line(datumi, skupaj, line_width=1.5, color='firebrick', legend=_('Profit'))
         plot.legend.background_fill_alpha = 0.95
         plot.legend.location = 'top_left'
         plot.legend.click_policy = 'hide'
@@ -89,6 +84,10 @@ def portfolio(request):
         context = {
             'scr': script,
             'div': div,
+            'sk_cena': np.round(sk_cena,2),
+            'sk_vrednost': np.round(sk_vrednost,2),
+            'diffp': np.round(sk_vrednost - sk_cena,2),
+            'diffn': np.round(sk_cena - sk_vrednost,2),
             'portfolio': table
         }
         return render(request, 'portfolio.html', context)
@@ -101,38 +100,20 @@ def portfolioDetailed(request, simbol):
     else:
         podjetje = Podjetje.objects.get(simbol=simbol)
         delnice = Delnica.objects.filter(simbol=podjetje).order_by('datum')
-        portf = Portfolio.objects.filter(uporabnik=user, simbol=simbol)
-        datumi = []
-        vrednosti = []
-        povprecne = []
-        for delnica in delnice:
-            datumi.append(delnica.datum)
-            vrednosti.append(round(delnica.zapiralniTecaj, 3))
-        vr = 0
-        kol = 0
-        for i in range(len(datumi)):
-            nak = portf.filter(datum=datumi[i])
-            for n in nak:
-                vr += n.kolicina * n.vrednost
-                kol += n.kolicina
-            if kol != 0:
-                povprecne.append(vr/kol)
-            else: povprecne.append(0)
-        povprecne =  list(map(lambda x: round(x,2), povprecne))
-        t1 = datetime.datetime
-        t2 = datetime.datetime
-        datum1 = max(datumi)-datetime.timedelta(days=60)
-        datum2 = max(datumi)
-        t1 = t1.fromordinal(datum1.toordinal()).timestamp()
-        t2 = t2.fromordinal(datum2.toordinal()).timestamp()
-        plot = figure(plot_height=400, plot_width=600, x_axis_type='datetime', x_range=(t1*1000, t2*1000))
-        # plot.circle(datumi, vrednosti, fill_color='white', line_color='black', size=8, legend=_('Zapiralni tečaj'))
-        plot.line(datumi, vrednosti, line_width=3, color='black', legend=_('Zapiralni tečaj'))
-        plot.line(datumi, povprecne, line_width=3, color='firebrick', legend=_('Povprečna vrednost kupljenih delnic'))
+        portf = Portfolio.objects.filter(uporabnik=user, simbol=podjetje).order_by('datum')
+        datumi = np.array(delnice.filter(datum__gte=portf[0].datum).values_list('datum').distinct())
+        arr = np.array(portf.values_list('kolicina', 'vrednost'))
+        kol = np.sum(arr[:,0])
+        avg = np.sum(arr[:,0]*arr[:,1])/kol
+        datumi = datumi.flatten()
+        vrednosti = np.array(delnice.filter(datum__gte=datumi[0]).values_list('zapiralniTecaj')).flatten()
+        povprecne = np.ones(datumi.shape)*avg
+
+        plot = figure(plot_height=400, plot_width=600, x_axis_type='datetime')
+        plot.line(datumi, vrednosti, line_width=1, color='black', legend=_('Zapiralni tečaj'))
+        plot.line(datumi, povprecne, line_width=1, color='firebrick', legend=_('Povprečna vrednost kupljenih delnic'))
         plot.legend.background_fill_alpha = 0.95
         plot.legend.location = 'top_left'
-        # plot.xaxis.major_label_orientation = 'vertical'
-        # plot.xaxis.major_label_standoff = 35
         script, div = components(plot)
         table = PortfolioTabela1(portf)
         deln = delnice.latest('datum')
@@ -143,10 +124,10 @@ def portfolioDetailed(request, simbol):
             'simbol': simbol,
             'podjetje': podjetje,
             'povp': round(povprecne[-1], 2),
-            'skupna': round(kol*povprecne[-1], 2),
+            'skupna': round(kol*avg, 2),
             'uradna': round(kol*deln.zapiralniTecaj, 2),
             'deln': round(deln.zapiralniTecaj,2),
-            'prof': round(kol*(deln.zapiralniTecaj - povprecne[-1]),2)
+            'prof': round(kol*(deln.zapiralniTecaj - avg),2)
         }
     return render(request, 'portfolioDetailed.html', context)
 
@@ -195,7 +176,7 @@ def newPurchase(request):
             # create a form instance and populate it with data from the request:
             form = PortfolioForm(request.POST)
             user = get_user(request)
-            pdb.set_trace()
+            # pdb.set_trace()
             # check whether it's valid:
             if form.is_valid() and (not user.is_anonymous):
                 nakup = form.save(commit=False)

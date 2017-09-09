@@ -28,8 +28,8 @@ class PoslovniPodatki(models.Model):
         return self.simbol
 
 class Delnica(models.Model):
-    simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
-    datum = models.DateField(verbose_name=_('Datum'))
+    simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'), db_index=True)
+    datum = models.DateField(db_index=True,verbose_name=_('Datum'))
     odpiralniTecaj = models.FloatField(verbose_name=_('Odpiralni tečaj'))
     zapiralniTecaj = models.FloatField(verbose_name=_('Zapiralni tečaj'))
     nepopravljenZapiralniTecaj = models.FloatField(verbose_name=_('Nepopravjen zapiralni tečaj'))
@@ -55,8 +55,8 @@ class Dividenda(models.Model):
 
 class Portfolio(models.Model):
     uporabnik = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Uporabnik'))
-    simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
-    datum = models.DateField(verbose_name=_('Datum'))
+    simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'), db_index=True)
+    datum = models.DateField(verbose_name=_('Datum'), db_index=True)
     vrednost = models.FloatField(verbose_name=_('Vrednost'))
     kolicina = models.BigIntegerField(verbose_name=_('Količina'))
 
