@@ -73,7 +73,7 @@ def portfolio(request):
 
         plot = figure(plot_width=600, plot_height=400, x_axis_type='datetime')
         for simbol, barva in zip(simboli, pal[::256//len(simboli)]):
-            plot.line(datumi,slovar[simbol['simbol']], line_width=1, color=barva, legend=simbol['simbol'])
+            plot.line(datumi,slovar[simbol['simbol']], line_width=1, line_alpha=0.7, color=barva, legend=simbol['simbol'])
         skupaj = [sum([list[i] for list in slovar.values()]) for i in range(len(datumi))]
         plot.line(datumi, skupaj, line_width=1.5, color='firebrick', legend=_('Profit'))
         plot.legend.background_fill_alpha = 0.95
