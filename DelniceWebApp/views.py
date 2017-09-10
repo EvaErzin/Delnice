@@ -109,6 +109,13 @@ def portfolioDetailed(request, simbol):
         vrednosti = np.array(delnice.filter(datum__gte=datumi[0]).values_list('zapiralniTecaj')).flatten()
         povprecne = np.ones(datumi.shape)*avg
 
+        izplacano = 0
+        dvd = Dividenda.objects.filter(simbol=simbol, datum__gte=datumi[0])
+        for dv in dvd:
+            temp = portf.filter(datum__lte=dv.datum).values('simbol').annotate(vsota=Sum('kolicina'))
+            de = delnice.get(datum=dv.datum).zapiralniTecaj
+            izplacano += np.round(temp[0]['vsota']*dv.vrednost*de/100, 2)
+
         plot = figure(plot_height=400, plot_width=600, x_axis_type='datetime')
         plot.line(datumi, vrednosti, line_width=1, color='black', legend=_('Zapiralni tečaj'))
         plot.line(datumi, povprecne, line_width=1, color='firebrick', legend=_('Povprečna vrednost kupljenih delnic'))
@@ -123,6 +130,7 @@ def portfolioDetailed(request, simbol):
             'portfolio': table,
             'simbol': simbol,
             'podjetje': podjetje,
+            'izplacano': izplacano,
             'povp': round(povprecne[-1], 2),
             'skupna': round(kol*avg, 2),
             'uradna': round(kol*deln.zapiralniTecaj, 2),

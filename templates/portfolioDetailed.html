@@ -45,6 +45,8 @@
             <p>{% trans 'Skupaj plačano za delnice' %}: <strong>{{ skupna}} $</strong></p>
             <p>{% trans 'Skupna vrednost delnic' %}: <strong>{{ uradna }} $</strong></p>
             <p>{% trans 'Trenutni dobiček' %}: <strong>{{ prof }} $</strong></p>
+            <br>
+            <p>{% trans 'Do sedaj izplačano dividend' %}: <strong>{{ izplacano }} $</strong></p>
 
             <form  method="GET" align="center" action={% url 'newPurchase' %}>
               {% csrf_token %}
