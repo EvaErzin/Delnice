@@ -144,6 +144,7 @@ def companyList(request):
 
 def companyDetails(request, simbol):
     podjetje = Podjetje.objects.get(simbol=simbol)
+    dividends = Dividenda.objects.filter(simbol=simbol)
     stock = Delnica.objects.filter(simbol=simbol)
     values = stock.values_list('zapiralniTecaj')
     value = stock.latest('datum').zapiralniTecaj
@@ -156,12 +157,15 @@ def companyDetails(request, simbol):
     plot.xaxis.formatter = DatetimeTickFormatter(days=["%d %B %Y"])
     plot.xaxis.major_label_orientation = 'horizontal'
     script, div = components(plot)
-    table = CompanyDetailsTabela(stock)
-    RequestConfig(request, paginate={'per_page': 50}).configure(table)
+    valueTable = CompanyDetailsTabela(stock)
+    RequestConfig(request, paginate={'per_page': 50}).configure(valueTable)
+    dividendTable = DividendsTabela(dividends)
+    RequestConfig(request, paginate={'per_page': 10}).configure(dividendTable)
     context = {
         'scr': script,
         'div': div,
-        'delnice': table,
+        'delnice': valueTable,
+        'dividende' : dividendTable,
         'podjetje': podjetje,
         'zadnjaVrednost' : value
     }

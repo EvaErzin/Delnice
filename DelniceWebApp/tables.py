@@ -35,6 +35,14 @@ class CompaniesTabela(tables.Table):
     def render_vrednost(self, value):
         return round(value, 3)
 
+class DividendsTabela(tables.Table):
+
+    class Meta:
+        model = Dividenda
+        attrs = {'class': 'mytable', 'span': 'true'}
+        fields = ('datum', 'vrednost')
+
+
 class CompanyDetailsTabela(tables.Table):
 
     class Meta:

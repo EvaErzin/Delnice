@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.db.models import F, FloatField, ExpressionWrapper
 
 class Podjetje(models.Model):
     simbol = models.CharField(max_length=8, verbose_name=_('Simbol'), primary_key=True)
