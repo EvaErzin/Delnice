@@ -39,5 +39,5 @@ class Command(BaseCommand):
                     d = Dividenda(simbol=podjetje, vrednost=value, datum=datum)
                     d.save()
 
-            print('Finished {} out of 100.'.format(i))
+            print('Finished {} out of {}.'.format(i, len(Podjetje.objects.all())))
             i+=1

@@ -67,7 +67,7 @@ def portfolio(request):
                     rez = np.where(datumi> nak[2], np.array([nak[0]*nak[1],nak[0]]), 0)
                 sk_cena += nak[0] * nak[1]
                 sk_vrednost += nak[0] * d.filter(simbol=simbol['simbol']).latest('datum').zapiralniTecaj
-            temp = np.transpose(np.array(d.filter(simbol=simbol['simbol']).order_by('datum').values_list('zapiralniTecaj').distinct()))*rez[:,1] - rez[:,0]
+            temp = np.transpose(np.array(d.filter(simbol=simbol['simbol']).order_by('datum').distinct("datum").values_list('zapiralniTecaj')))*rez[:,1] - rez[:,0]
             slovar[simbol['simbol']] = list(temp.flatten())
         datumi = datumi.flatten()
 
@@ -167,10 +167,9 @@ def companyDetails(request, simbol):
     plot.xaxis.formatter = DatetimeTickFormatter(days=["%d %B %Y"])
     plot.xaxis.major_label_orientation = 'horizontal'
     script, div = components(plot)
-    valueTable = CompanyDetailsTabela(stock)
+    valueTable = CompanyDetailsTabela(stock.order_by("-datum"))
     RequestConfig(request, paginate={'per_page': 50}).configure(valueTable)
-    dividendTable = DividendsTabela(dividends)
-    #RequestConfig(request, paginate={'per_page': 10}).configure(dividendTable)
+    dividendTable = DividendsTabela(dividends.order_by("-datum"))
     context = {
         'scr': script,
         'div': div,
