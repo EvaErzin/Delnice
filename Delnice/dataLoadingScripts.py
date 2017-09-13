@@ -97,7 +97,7 @@ class Company:
             print("Stock data for {} already up to date".format(self.fullName))
             return
         else:
-            start = self.lastStockDate.isoformat()
+            start = (self.lastStockDate + datetime.timedelta(days=1)).isoformat()
 
         failedAttempts = 0
         while True:
