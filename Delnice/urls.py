@@ -36,8 +36,3 @@ urlpatterns += i18n_patterns(
     url('^brisi/(?P<id>.+?)$', views.brisiNakup, name='brisiNakup')
 )
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
