@@ -24,7 +24,7 @@ class PoslovniPodatki(models.Model):
         unique_together = ('simbol', 'leto', 'cetrtletje')
 
     def __str__(self):
-        return self.simbol
+        return self.simbol.simbol
 
 class Delnica(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'), db_index=True)
@@ -39,7 +39,7 @@ class Delnica(models.Model):
         unique_together = ('simbol', 'datum')
 
     def __str__(self):
-        return self.simbol
+        return self.simbol.simbol
 
 class Dividenda(models.Model):
     simbol = models.ForeignKey(Podjetje, verbose_name=_('Simbol'))
@@ -50,7 +50,7 @@ class Dividenda(models.Model):
         unique_together = ('simbol', 'datum')
 
     def __str__(self):
-        return self.simbol
+        return self.simbol.simbol
 
 class Portfolio(models.Model):
     uporabnik = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Uporabnik'))
@@ -60,4 +60,4 @@ class Portfolio(models.Model):
     kolicina = models.BigIntegerField(verbose_name=_('Količina'))
 
     def __str__(self):
-        return self.simbol
+        return self.simbol.simbol

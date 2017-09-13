@@ -13,11 +13,12 @@ class PortfolioTabela(tables.Table):
         fields = ('simbol', 'kolicinaSkupaj')
 
 class PortfolioTabela1(tables.Table):
+    brisi = tables.LinkColumn('brisiNakup', text=_('Odstrani'), args=[A('id')], verbose_name='')
 
     class Meta:
         model = Portfolio
         attrs = {'class': 'mytable', 'span': 'true'}
-        fields = ('datum', 'vrednost', 'kolicina')
+        fields = ('datum', 'vrednost', 'kolicina', 'brisi')
 
     def render_vrednost(self, value):
         return round(value, 3)

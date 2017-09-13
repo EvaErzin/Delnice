@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from DelniceWebApp import views
+import Delnice.settings as settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -31,5 +32,12 @@ urlpatterns += i18n_patterns(
     url('^portfolio/(?P<simbol>.+?)$', views.portfolioDetailed, name='portfolioDetailed'),
     url('^companies/$', views.companyList, name="companyList"),
     url('^companies/(?P<simbol>.+?)$', views.companyDetails, name='companyDetails'),
-    url('^novNakup/$', views.newPurchase, name='newPurchase')
+    url('^novNakup/$', views.newPurchase, name='newPurchase'),
+    url('^brisi/(?P<id>.+?)$', views.brisiNakup, name='brisiNakup')
 )
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

@@ -20,6 +20,7 @@
     <link rel="stylesheet" href=" {% static 'Delnice/bootstrap-datepicker.css' %}">
 
     <link rel="stylesheet" href="{% static 'Delnice/table.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "Delnice/background.css" %}">
 </head>
 <body>
 
@@ -46,7 +47,7 @@
 <script>
 $(document).ready(function() {
     $('.datepicker').datepicker({
-        format: 'dd.mm.yyyy'
+        format: 'yyyy-mm-dd';
 });
 });
 </script>

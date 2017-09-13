@@ -102,6 +102,8 @@ def portfolioDetailed(request, simbol):
         delnice = Delnica.objects.filter(simbol=podjetje).order_by('datum')
         portf = Portfolio.objects.filter(uporabnik=user, simbol=podjetje).order_by('datum')
         datumi = np.array(delnice.filter(datum__gte=portf[0].datum).values_list('datum').distinct())
+        if len(datumi) == 0 or len(datumi) == 1:
+            datumi = np.array([delnice.latest('datum').datum])
         arr = np.array(portf.values_list('kolicina', 'vrednost'))
         kol = np.sum(arr[:,0])
         avg = np.sum(arr[:,0]*arr[:,1])/kol
@@ -209,3 +211,9 @@ def newPurchase(request):
             form = PortfolioForm(initial=data)
 
             return render(request, 'newPurchase.html', {'form': form})
+
+def brisiNakup(request, id):
+    n = Portfolio.objects.get(id=id)
+    p = n.simbol
+    n.delete()
+    return portfolioDetailed(request, p)

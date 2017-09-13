@@ -3,6 +3,7 @@
 <head>
 
     {% load i18n %}
+    {% load static %}
     <meta charset="UTF-8">
     <meta name='body' content="text/html">
     <title>Index</title>
@@ -12,13 +13,18 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
-<body>
+<body style="background-image: url(http://i64.tinypic.com/23wqxc8.jpg); background-size: cover">
 
 
 {% include 'navbar.html' %}
 {% if request.user.is_authenticated %}
-    <h1 align="center">{% trans "Dobrodošel/a" %} <span style="color: firebrick">{{ user.get_username }}</span> !</h1>
+    <h1 align="center" style="color:white; padding-top: 200px">{% trans "Dobrodošel/a" %} <span style="color: firebrick">{{ user.get_username }}</span> !</h1>
+{% else %}
+    <h1 align="center" style="color:white; padding-top: 200px">{% trans "Dobrodošel/a" %}!</h1>
+    <p align="center" style="color: white"> {% trans "To je aplikacija za vodenje portfolia" %}.</p>
+    <p align="center" style="color: white">{% trans "Prosim" %}, <a style="color: firebrick" href="{% url 'login' %}">{% trans "prijavi" %}</a> {% trans "ali" %} <a style="color: firebrick" href="{% url 'register' %}">{% trans "registriraj se" %}</a>!</p>
 {% endif %}
 </body>
 </html>
