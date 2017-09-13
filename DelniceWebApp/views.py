@@ -67,7 +67,7 @@ def portfolio(request):
                     rez = np.where(datumi> nak[2], np.array([nak[0]*nak[1],nak[0]]), 0)
                 sk_cena += nak[0] * nak[1]
                 sk_vrednost += nak[0] * d.filter(simbol=simbol['simbol']).latest('datum').zapiralniTecaj
-            temp = np.transpose(np.array(d.filter(simbol=simbol['simbol']).order_by('datum').values_list('zapiralniTecaj').distinct()))*rez[:,1] - rez[:,0]
+            temp = np.transpose(np.array(d.filter(simbol=simbol['simbol']).order_by('datum').distinct('datum').values_list('zapiralniTecaj')))*rez[:,1] - rez[:,0]
             slovar[simbol['simbol']] = list(temp.flatten())
         datumi = datumi.flatten()
 

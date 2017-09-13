@@ -1,0 +1,260 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-10 13:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+#: .\templates\companyDetails.html:37
+#, fuzzy
+#| msgid "Moj Portfolio"
+msgid " 'Dodaj v portfolio' "
+msgstr " 'Add to portfolio' "
+
+#: .\templates\companyDetails.html:50
+msgid "Dividende"
+msgstr "Dividends"
+
+#: .\templates\companyDetails.html:56
+msgid "Dnevne vrednosti"
+msgstr "Daily values"
+
+#: .\templates\companyList.html:9 .\templates\companyList.html:26
+msgid "Company List"
+msgstr ""
+
+#: .\templates\index.html:23 .\templates\index.html:25
+msgid "Dobrodošel/a"
+msgstr "Welcome"
+
+#: .\templates\index.html:26
+msgid "To je aplikacija za vodenje portfolia"
+msgstr "This is a portfolio management application"
+
+#: .\templates\index.html:27
+#, fuzzy
+#| msgid "Promet"
+msgid "Prosim"
+msgstr "Revenue"
+
+#: .\templates\index.html:27
+#, fuzzy
+#| msgid "prijavi"
+msgid "prijavi"
+msgstr "sign in"
+
+#: .\templates\index.html:27
+msgid "ali"
+msgstr "or"
+
+#: .\templates\index.html:27
+#, fuzzy
+#| msgid "Registriraj se!"
+msgid "registriraj se"
+msgstr "register"
+
+#: .\templates\navbar.html:13
+msgid "Domov"
+msgstr "Home"
+
+#: .\templates\navbar.html:19
+msgid "Seznam podjetij"
+msgstr "Company list"
+
+#: .\templates\navbar.html:31 .\templates\portfolio.html:41
+msgid "Moj Portfolio"
+msgstr "My Portfolio"
+
+#: .\templates\navbar.html:32
+msgid "Odjava"
+msgstr "Sign Out"
+
+#: .\templates\navbar.html:34
+msgid "Prijava"
+msgstr "Sign In"
+
+#: .\templates\navbar.html:50
+msgid "Go"
+msgstr "Go"
+
+#: .\templates\newPurchase.html:8 .\templates\newPurchase.html:28
+#, fuzzy
+#| msgid "'Nov nakup'"
+msgid "Nov Nakup"
+msgstr "'New purchase'"
+
+#: .\templates\newPurchase.html:42
+msgid " \"Shrani!\" "
+msgstr " \"Save!\" "
+
+#: .\templates\portfolio.html:9 .\templates\portfolioDetailed.html:9
+#, fuzzy
+#| msgid "Moj Portfolio"
+msgid "Portfolio"
+msgstr "My Portfolio"
+
+#: .\templates\portfolio.html:50 .\templates\portfolioDetailed.html:45
+msgid "Skupaj plačano za delnice"
+msgstr "Paid for stocks in total"
+
+#: .\templates\portfolio.html:51
+#, fuzzy
+#| msgid "Trenutna vrednost delnice"
+msgid "Trenutna vrednost delnic"
+msgstr "Current stock price"
+
+#: .\templates\portfolio.html:53 .\templates\portfolioDetailed.html:47
+msgid "Trenutni dobiček"
+msgstr "Current profit"
+
+#: .\templates\portfolio.html:55
+msgid "Trenutna izguba"
+msgstr "Current loss"
+
+#: .\templates\portfolio.html:60 .\templates\portfolioDetailed.html:53
+msgid "'Nov nakup'"
+msgstr "'New purchase'"
+
+#: .\templates\portfolioDetailed.html:43
+msgid "Povprečna vrednost kupljene delnice"
+msgstr "Average stock price"
+
+#: .\templates\portfolioDetailed.html:44
+msgid "Trenutna vrednost delnice"
+msgstr "Current stock price"
+
+#: .\templates\portfolioDetailed.html:46
+msgid "Skupna vrednost delnic"
+msgstr "Total value of stocks"
+
+#: .\templates\portfolioDetailed.html:49
+msgid "Do sedaj izplačano dividend"
+msgstr "Dividend payout"
+
+#: .\templates\registration\login.html:28
+msgid "Your username and password didn't match. Please try again."
+msgstr "Your username and password didn't match. Please try again"
+
+#: .\templates\registration\login.html:44
+msgid "Login"
+msgstr "Login"
+
+#: .\templates\registration\login.html:49
+msgid "Izgubljeno geslo?"
+msgstr "Lost password?"
+
+#: .\templates\registration\login.html:50
+msgid "Brez računa?"
+msgstr "No account?"
+
+#: .\templates\registration\login.html:50
+msgid "Registriraj se!"
+msgstr "Register!"
+
+#: .\templates\registration\register.html:8
+#, fuzzy
+#| msgid "Registriraj se!"
+msgid "Registracija"
+msgstr "Registration"
+
+#: .\templates\registration\register.html:35
+#, fuzzy
+#| msgid "Registriraj se!"
+msgid " \"Registriraj se!\" "
+msgstr "Register!"
+
+#~ msgid "Simbol"
+#~ msgstr "Ticker"
+
+#~ msgid "Polno ime"
+#~ msgstr "Full name"
+
+#~ msgid "Lokacija"
+#~ msgstr "Location"
+
+#~ msgid "Sektor"
+#~ msgstr "Sector"
+
+#~ msgid "Industrija"
+#~ msgstr "Industry"
+
+#~ msgid "IPO"
+#~ msgstr "IPO"
+
+#~ msgid "Leto"
+#~ msgstr "Year"
+
+#~ msgid "Četrtletje"
+#~ msgstr "Quarter"
+
+#~ msgid "Dobicek"
+#~ msgstr "Profit"
+
+#~ msgid "Datum"
+#~ msgstr "Date"
+
+#~ msgid "Odpiralni tečaj"
+#~ msgstr "Open price"
+
+#~ msgid "Zapiralni tečaj"
+#~ msgstr "Closing price"
+
+#~ msgid "Nepopravjen zapiralni tečaj"
+#~ msgstr "Unadjusted closing price"
+
+#~ msgid "Volumen trgovanja"
+#~ msgstr "Volume"
+
+#~ msgid "Število vseh delnic"
+#~ msgstr "Total number of stocks"
+
+#, fuzzy
+#~| msgid "Vrednost"
+#~ msgid "Vrednost"
+#~ msgstr "Value"
+
+#~ msgid "Uporabnik"
+#~ msgstr "User"
+
+#~ msgid "Količina"
+#~ msgstr "Amount"
+
+#~ msgid "Skupaj kupljeno"
+#~ msgstr "Bought in total"
+
+#~ msgid "Vrednost [M$]"
+#~ msgstr "Value [M$]"
+
+#~ msgid "Povprečna vrednost kupljenih delnic"
+#~ msgstr "Average price of bought stocks "
+
+#~ msgid "Slovenian"
+#~ msgstr "Slovenian"
+
+#~ msgid "English"
+#~ msgstr "English"
+
+#, fuzzy
+#~| msgid "Promet"
+#~ msgid "Prmet"
+#~ msgstr "Please"
+
+#~ msgid "Delnice"
+#~ msgstr "Stocks"
+
+#, fuzzy
+#~| msgid "Moj Portfolio"
+#~ msgid "Dodaj v portfolio"
+#~ msgstr "Add to portfolio"
