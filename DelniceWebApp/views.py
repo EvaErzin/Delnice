@@ -155,7 +155,7 @@ def companyList(request):
 def companyDetails(request, simbol):
     podjetje = Podjetje.objects.get(simbol=simbol)
     dividends = Dividenda.objects.filter(simbol=simbol)
-    stock = Delnica.objects.filter(simbol=simbol)
+    stock = Delnica.objects.filter(simbol=simbol).order_by('datum')
     values = stock.values_list('zapiralniTecaj')
     value = stock.latest('datum').zapiralniTecaj
     dates = stock.values_list('datum')
@@ -170,7 +170,7 @@ def companyDetails(request, simbol):
     valueTable = CompanyDetailsTabela(stock)
     RequestConfig(request, paginate={'per_page': 50}).configure(valueTable)
     dividendTable = DividendsTabela(dividends)
-    RequestConfig(request, paginate={'per_page': 10}).configure(dividendTable)
+    #RequestConfig(request, paginate={'per_page': 10}).configure(dividendTable)
     context = {
         'scr': script,
         'div': div,

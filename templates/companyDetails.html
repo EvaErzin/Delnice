@@ -29,7 +29,7 @@
 </head>
 <body>
 
-{% include "navbar.html" %}
+    {% include "navbar.html" %}
     <h1 align="center"><b> {{ podjetje.polnoIme }} </b></h1>
     <div align="center">
         <form  method="GET" action={% url 'newPurchase' %}>
@@ -39,22 +39,29 @@
               <input type="hidden" name="vrednost" value={{ zadnjaVrednost }}>
             </form>
     </div>
-<br>
-    <div class="container" style="width: 90%">
-        <div class="graf" style="float: left; width: 50%">
+    <br>
+
+    <div class="container">
+        <div class="graf" style="float: left">
             {{ div | safe}}
             {{ scr | safe}}
         </div>
-        <div class="container" style="width: 50%; float: right; align-content: center">
-            <div style=" width: 250px; float: left">
-                <h3 align="center">{% trans 'Dividende' %} </h3>
-                {% render_table dividende %}
+        <div class="panel panel-default" style="padding-right: 5%">
+            <div class="panel-body" align="center" style="padding-top: -100px">
+                    <h3>{% trans 'Dividende' %} </h3>
+                    <div style="overflow-y: scroll; max-height: 300px; padding-left: 5%" align="center">
+                        {% render_table dividende %}
+                </div>
             </div>
         </div>
     </div>
     <br>
     <h3 align="center">{% trans 'Dnevne vrednosti' %} </h3>
-    {% render_table delnice %}
-
+    <div class="container" style="width: 98%" align="center">
+        {% render_table delnice %}
+    </div>
 </body>
 </html>
+
+
+

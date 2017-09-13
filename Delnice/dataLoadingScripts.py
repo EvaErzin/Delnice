@@ -119,11 +119,11 @@ class Company:
                 splitArray = yqd.load_yahoo_quote(self.tickerSymbol, isoToPlain(start), isoToPlain(datetime.date.today().isoformat()), info = "split")[1:]
                 break
             except urllib.error.HTTPError:
-                share = yfn.Share(self.tickerSymbol)
+                #share = yfn.Share(self.tickerSymbol)
                 failedAttempts += 1
                 if failedAttempts == 5:
                     print("Loading yahoo finance  for {} failed".format(self.tickerSymbol))
-                continue
+                    return
 
         splitDict = {}
         for i in splitArray:
@@ -262,7 +262,7 @@ def getTopCompanies(companyDict, N=500, forceUpdate = False):
 
     return companyDict
 
-def updateStockQuotes(companyDict, startDate = "2000-01-01"):
+def updateStockQuotes(companyDict, startDate = "2015-01-01"):
     """Updates stock data for all companies in companyDict starting at either the startDate or last know date"""
     if companyDict == None:
         return None

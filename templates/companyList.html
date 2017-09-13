@@ -24,8 +24,9 @@
 {% include 'navbar.html' %}
 
 <center><h1><b>{% trans 'Company List' %}</b></h1></center>
-
-{% render_table companies %}
+<div class="container" style="width: 98%", align="center">
+    {% render_table companies %}
+</div>
 
 
 </body>
