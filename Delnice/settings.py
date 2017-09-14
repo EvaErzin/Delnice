@@ -81,16 +81,12 @@ WSGI_APPLICATION = 'Delnice.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'public': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'sem2017_evae',
         'HOST': 'baza.fmf.uni-lj.si',
         'USER': 'javnost',
         'PASSWORD': 'javnogeslo'
-    },
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'local_database'
     }
 }
 
