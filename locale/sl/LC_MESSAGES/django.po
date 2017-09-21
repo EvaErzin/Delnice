@@ -219,7 +219,7 @@ msgstr "Trenutni dobiček"
 msgid "Trenutna izguba"
 msgstr "Trenutna izguba"
 
-#: .\templates\portfolio.html:60 .\templates\portfolioDetailed.html:53
+#: .\templates\portfolio.html:60 .\templates\portfolioDetailed.html:53 .\templates\emptyPortf.html:41
 msgid "'Nov nakup'"
 msgstr "'Nov nakup'"
 
@@ -255,6 +255,9 @@ msgstr "Izgubljeno geslo?"
 msgid "Brez računa?"
 msgstr "Brez računa?"
 
+#: .\templates\emptyPortf.html:35
+msgid "Vaš portfolio je še prazen!"
+msgstr "Vaš portfolio je še prazen!"
 
 #: .\templates\registration\register.html:8
 msgid "Registracija"

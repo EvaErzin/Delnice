@@ -217,7 +217,7 @@ msgstr "Current profit"
 msgid "Trenutna izguba"
 msgstr "Current loss"
 
-#: .\templates\portfolio.html:60 .\templates\portfolioDetailed.html:53
+#: .\templates\portfolio.html:60 .\templates\portfolioDetailed.html:53  .\templates\emptyPortf.html:41
 msgid "'Nov nakup'"
 msgstr "'New purchase'"
 
@@ -264,3 +264,7 @@ msgstr "Registration"
 #: .\templates\registration\register.html:27
 msgid "Invalid input. Please try again!"
 msgstr "Invalid input. Please try again!"
+
+#: .\templates\emptyPortf.html:35
+msgid "Vaš portfolio je še prazen!"
+msgstr "Your portfolio is still empty!"

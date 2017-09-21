@@ -50,6 +50,8 @@ def portfolio(request):
     else:
         d = Delnica.objects.all()
         portf = Portfolio.objects.filter(uporabnik=user)
+        if len(portf) < 1:
+            return render(request, 'emptyPortf.html')
         portf1 = portf.values('simbol').annotate(kolicinaSkupaj=Sum('kolicina'))
         slovar = {}
         simboli = portf.distinct('simbol').values('simbol')
