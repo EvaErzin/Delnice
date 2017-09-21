@@ -101,6 +101,8 @@ def portfolioDetailed(request, simbol):
         podjetje = Podjetje.objects.get(simbol=simbol)
         delnice = Delnica.objects.filter(simbol=podjetje).order_by('datum')
         portf = Portfolio.objects.filter(uporabnik=user, simbol=podjetje).order_by('datum')
+        if len(portf) == 0:
+            return portfolio(request)
         datumi = np.array(delnice.filter(datum__gte=portf[0].datum).values_list('datum').distinct())
         if len(datumi) == 0 or len(datumi) == 1:
             datumi = np.array([delnice.latest('datum').datum])
