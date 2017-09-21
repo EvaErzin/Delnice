@@ -22,8 +22,15 @@ import itertools
 import pdb
 import datetime
 
+from django import get_version
+from distutils.version import StrictVersion
+
 # Create your views here.
 
+if StrictVersion(get_version()) < StrictVersion('1.10'):
+    is_anonymous = lambda u: u.is_anonymous()
+else:
+    is_anonymous = lambda u: u.is_anonymous
 
 def index(request):
     return render(request, 'index.html')
@@ -45,7 +52,7 @@ def register(request):
 
 def portfolio(request):
     user = get_user(request)
-    if user.is_anonymous:
+    if is_anonymous(user):
         return redirect('login')
     else:
         d = Delnica.objects.all()
@@ -95,7 +102,7 @@ def portfolio(request):
 
 def portfolioDetailed(request, simbol):
     user = get_user(request)
-    if user.is_anonymous:
+    if is_anonymous(user):
         return redirect('login')
     else:
         podjetje = Podjetje.objects.get(simbol=simbol)
@@ -185,7 +192,7 @@ def companyDetails(request, simbol):
 
 def newPurchase(request):
     user = get_user(request)
-    if user.is_anonymous:
+    if is_anonymous(user):
         return redirect('login')
     else:
         if request.method == 'POST':
@@ -194,12 +201,12 @@ def newPurchase(request):
             user = get_user(request)
             # pdb.set_trace()
             # check whether it's valid:
-            if form.is_valid() and (not user.is_anonymous):
+            if form.is_valid() and (not is_anonymous(user)):
                 nakup = form.save(commit=False)
                 nakup.uporabnik = user
                 nakup.save()
                 return HttpResponseRedirect('/portfolio/')
-            elif user.is_anonymous:
+            elif is_anonymous(user):
                 return redirect('login')
             else:
                 return render(request, 'newPurchase.html', {'form': form})
