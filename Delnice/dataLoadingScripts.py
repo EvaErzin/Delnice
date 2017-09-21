@@ -274,3 +274,46 @@ def updateStockQuotes(companyDict, startDate = "2015-01-01"):
             companyDict[i].loadStockData(startDate)
         except Exception as exc:
             print("Error loading stock data: ", exc)
+
+
+def popraviGlupoNapako():
+
+    def isoToPlain(iso):
+        return iso[:4] + iso[5:7] + iso[8:]
+
+    companyList = djangoModels.Podjetje.objects.values_list('simbol', flat=True)
+    for simbol in companyList:
+        stockArray = yqd.load_yahoo_quote(simbol,isoToPlain(datetime.date(2017,6,7).isoformat()), isoToPlain(datetime.date(2017,6,7).isoformat()))[1:][::-1]
+
+        for i in stockArray:
+            if i == '':
+                continue
+
+            data = i.split(',')
+
+            for i in range(len(data)):
+                if data[i] == 'null':
+                    data[i] = '0'
+
+            failedAttempts = 0
+            while True:
+                try:
+                    delnica = djangoModels.Delnica(simbol=djangoModels.Podjetje.objects.get(simbol=simbol),
+                                                   datum = datetime.date(int(data[0][:4]), int(data[0][5:7]),
+                                                                         int(data[0][8:])))
+                    delnica.odpiralniTecaj = float(data[1])
+                    delnica.zapiralniTecaj = float(data[5])
+                    delnica.nepopravljenZapiralniTecaj = float(data[4])
+                    delnica.volumenTrgovanja = float(data[6])
+                    delnica.steviloDelnic = int(totalVolume)
+                    delnica.save()
+                    break
+                except Exception as exc:
+                    print(simbol, exc)
+                    print(data)
+                    time.sleep(0.5)
+                    failedAttempts += 1
+                    if failedAttempts == 5:
+                        print("Pushing data into database for {} failed".format(self.tickerSymbol))
+                        break
+                    continue

@@ -1,0 +1,48 @@
+{% load i18n %}
+{% load django_tables2 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>{% trans 'Portfolio' %}</title>
+
+        <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.css"
+    rel="stylesheet" type="text/css">
+    <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.css"
+    rel="stylesheet" type="text/css">
+
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'Delnice/table.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static "Delnice/background.css" %}">
+</head>
+<body>
+<meta content="text/html">
+{% include 'navbar.html' %}
+
+    <h1 align="center"><strong>{% trans "Vaš portfolio je še prazen!" %}</strong></h1>
+<br>
+<br>
+
+    <form  method="GET" align="center" action={% url 'newPurchase' %}>
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value={% blocktrans %}'Nov nakup'{% endblocktrans %}  />
+        <input type="hidden" name="podjetje" value="">
+        <input type="hidden" name="vrednost" value="">
+    </form>
+
+
+</body>
+</html>

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'DelniceWebApp.apps.DelnicewebappConfig',
     'Delnice',
-    'django_tables2'
+    'django_tables2',
 ]
 
 MIDDLEWARE = [
