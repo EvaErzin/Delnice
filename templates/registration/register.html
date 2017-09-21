@@ -22,6 +22,10 @@
 {% include 'navbar.html' %}
 
 <div style="text-align: center; padding-top: 150px" align="center">
+
+        {% if form.errors %}
+            <p>{% trans "Invalid input. Please try again!" %}</p>
+        {% endif %}
     <form method="post" action="">
         {% csrf_token %}
         <table align="center">

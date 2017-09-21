@@ -255,9 +255,6 @@ msgstr "Izgubljeno geslo?"
 msgid "Brez računa?"
 msgstr "Brez računa?"
 
-#: .\templates\registration\login.html:50
-msgid "Registriraj se!"
-msgstr "Registriraj se!"
 
 #: .\templates\registration\register.html:8
 msgid "Registracija"
@@ -266,3 +263,9 @@ msgstr "Registracija"
 #: .\templates\registration\register.html:35
 msgid " \"Registriraj se!\" "
 msgstr " \"Registriraj se!\" "
+
+
+#: .\templates\registration\register.html:27
+msgid "Invalid input. Please try again!"
+msgstr "Nepravilen vnos. Prosim poskusi ponovno!"
+

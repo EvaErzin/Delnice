@@ -261,6 +261,6 @@ msgstr "Register!"
 msgid "Registracija"
 msgstr "Registration"
 
-#: .\templates\registration\register.html:35
-msgid " \"Registriraj se!\" "
-msgstr " \"Register!\" "
+#: .\templates\registration\register.html:27
+msgid "Invalid input. Please try again!"
+msgstr "Invalid input. Please try again!"
